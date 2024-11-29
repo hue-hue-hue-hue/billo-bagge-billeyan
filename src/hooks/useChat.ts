@@ -5,7 +5,7 @@ import {
   addAttachment,
   removeAttachment,
   setPrompt,
-} from "@/redux/chat/chat.slice";
+} from "@/redux/prompt/prompt.slice";
 
 export const useChat = () => {
   const dispatch = useDispatch();

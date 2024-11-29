@@ -25,7 +25,7 @@ const ChatInput: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col bg-[#141415] border border-[#313131] p-4 rounded-lg shadow-lg w-full max-w-lg mx-auto">
+    <div className="flex flex-col bg-[#141415] border border-[#313131] p-4 rounded-lg shadow-lg w-full mx-auto">
       <div className="mb-2">
         {attachments.map((file) => (
           <div
@@ -65,7 +65,7 @@ const ChatInput: React.FC = () => {
         />
         <button
           onClick={handleSend}
-          className="border border-[#313131] rounded-lg p-[9px]"
+          className="border border-[#313131] rounded-lg p-[9px] hover:border-[#5b5b5b] text-[#5b5b5b] transition-all"
         >
           <Image src={UPARRSVG} alt="enter" />
         </button>
