@@ -2,48 +2,43 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type Chat = {
   message: string;
-  role: "USER" | "RAG";
+  role: "USER" | "RAG" | "INTERMEDIATE";
   order: number;
 };
 
 interface ChatState {
   conversations: Chat[];
+  currentState:
+    | "WAIT"
+    | "PROMPT"
+    | "CLASSIFIER"
+    | "ADARAG"
+    | "PLANRAG"
+    | "STEP1"
+    | "STEP2"
+    | "STEP3"
+    | "STEP4"
+    | "STEP5"
+    | "RETRIEVAL"
+    | "WEBSEARCH";
 }
 
 const initialState: ChatState = {
   conversations: [],
+  currentState: "WAIT",
 };
 
 const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
-    setPrompt(state, action: PayloadAction<string>) {
-      //   state.prompt = action.payload;
-    },
-    // addAttachment(state, action: PayloadAction<FileAttachment>) {
-    //   state.attachments.push(action.payload);
-    // },
-    removeAttachment(state, action: PayloadAction<string>) {
-      //   state.attachments = state.attachments.filter(
-      //     (file) => file.id !== action.payload
-      //   );
-    },
-    clearPrompt(state) {
-      //   state.prompt = "";
-    },
-    clearAttachments(state) {
-      //   state.attachments = [];
+    addChat(state, action: PayloadAction<Chat>) {
+      state.conversations.push(action.payload);
+      state.currentState = "PROMPT";
     },
   },
 });
 
-export const {
-  setPrompt,
-  //   addAttachment,
-  removeAttachment,
-  clearPrompt,
-  clearAttachments,
-} = chatSlice.actions;
+export const { addChat } = chatSlice.actions;
 
 export default chatSlice.reducer;
