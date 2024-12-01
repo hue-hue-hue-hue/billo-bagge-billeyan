@@ -1,17 +1,7 @@
+import { FileAttachment, PromptState } from "@/utils/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface FileAttachment {
-  id: string;
-  name: string;
-  size: number;
-}
-
-interface ChatState {
-  prompt: string;
-  attachments: FileAttachment[];
-}
-
-const initialState: ChatState = {
+const initialState: PromptState = {
   prompt: "",
   attachments: [],
 };

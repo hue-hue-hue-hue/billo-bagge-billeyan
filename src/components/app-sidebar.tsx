@@ -14,11 +14,17 @@ import {
 import CHATSVG from "@/assets/icons/chat.svg";
 import HOMESVG from "@/assets/icons/home.svg";
 import PLUSSVG from "@/assets/icons/plus.svg";
+import LIBRARYSVG from "@/assets/icons/library.svg";
 import Image from "next/image";
 import Link from "next/link";
+import useChat from "@/hooks/useChat";
 
 export function AppSidebar() {
-  const { open } = useSidebar();
+  const { open, toggleSidebar } = useSidebar();
+  const { conversations } = useChat();
+  const handleLibraryClick = () => {
+    if (!open) toggleSidebar();
+  };
 
   return (
     <Sidebar collapsible="icon">
@@ -54,6 +60,31 @@ export function AppSidebar() {
                 <span>Home</span>
               </Link>
             </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild onClick={handleLibraryClick}>
+              <div className="text-xl">
+                <Image src={LIBRARYSVG} alt="home" />
+                <span>Library</span>
+              </div>
+            </SidebarMenuButton>
+            {open && conversations.length && (
+              <div className="mt-4 space-y-2 pl-4 flex flex-col">
+                {conversations.map(
+                  (conversation: { id: string; title: string }) => (
+                    <Link
+                      href={`/conversation/${conversation.id}`}
+                      key={conversation.id}
+                      className="text-base cursor-pointer hover:underline"
+                    >
+                      {conversation.title}
+                    </Link>
+                  )
+                )}
+              </div>
+            )}
           </SidebarMenuItem>
         </SidebarGroup>
       </SidebarContent>

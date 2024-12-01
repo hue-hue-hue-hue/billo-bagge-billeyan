@@ -1,13 +1,12 @@
-import { useChat } from "@/hooks/useChat";
+import { usePrompt } from "@/hooks/usePrompt";
 import { useRef } from "react";
-
 import ATTACHSVG from "@/assets/icons/attachment.svg";
 import UPARRSVG from "@/assets/icons/uparr.svg";
 import Image from "next/image";
 
 const ChatInput: React.FC = () => {
   const { prompt, attachments, updatePrompt, uploadFile, deleteAttachment } =
-    useChat();
+    usePrompt();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

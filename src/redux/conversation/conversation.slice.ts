@@ -1,44 +1,78 @@
+import { conversations } from "@/utils/dummy";
+import { ChatState, Chat } from "@/utils/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type Chat = {
-  message: string;
-  role: "USER" | "RAG" | "INTERMEDIATE";
-  order: number;
-};
-
-interface ChatState {
-  conversations: Chat[];
-  currentState:
-    | "WAIT"
-    | "PROMPT"
-    | "CLASSIFIER"
-    | "ADARAG"
-    | "PLANRAG"
-    | "STEP1"
-    | "STEP2"
-    | "STEP3"
-    | "STEP4"
-    | "STEP5"
-    | "RETRIEVAL"
-    | "WEBSEARCH";
-}
-
 const initialState: ChatState = {
-  conversations: [],
+  conversations: conversations,
+  activeConversationId: null,
   currentState: "WAIT",
+  webSearchContent: null,
+  retrievedContext: null,
 };
 
 const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
+    addConversation(
+      state,
+      action: PayloadAction<{ id: string; title: string }>
+    ) {
+      state.conversations.push({
+        id: action.payload.id,
+        title: action.payload.title,
+        chats: [],
+      });
+      state.activeConversationId = action.payload.id;
+    },
+
+    setActiveConversation(state, action: PayloadAction<string>) {
+      state.activeConversationId = action.payload;
+    },
+
     addChat(state, action: PayloadAction<Chat>) {
-      state.conversations.push(action.payload);
-      state.currentState = "PROMPT";
+      const activeConversation = state.conversations.find(
+        (conv) => conv.id === state.activeConversationId
+      );
+      if (activeConversation) {
+        activeConversation.chats.push(action.payload);
+      }
+    },
+
+    setCurrentState(state, action: PayloadAction<ChatState["currentState"]>) {
+      state.currentState = action.payload;
+    },
+
+    setWebSearchContent(state, action: PayloadAction<string | null>) {
+      state.webSearchContent = action.payload;
+    },
+
+    setRetrievedContext(state, action: PayloadAction<string | null>) {
+      state.retrievedContext = action.payload;
+    },
+
+    clearActiveConversation(state) {
+      const activeConversation = state.conversations.find(
+        (conv) => conv.id === state.activeConversationId
+      );
+      if (activeConversation) {
+        activeConversation.chats = [];
+      }
+      state.currentState = "WAIT";
+      state.webSearchContent = null;
+      state.retrievedContext = null;
     },
   },
 });
 
-export const { addChat } = chatSlice.actions;
+export const {
+  addConversation,
+  setActiveConversation,
+  addChat,
+  setCurrentState,
+  setWebSearchContent,
+  setRetrievedContext,
+  clearActiveConversation,
+} = chatSlice.actions;
 
 export default chatSlice.reducer;

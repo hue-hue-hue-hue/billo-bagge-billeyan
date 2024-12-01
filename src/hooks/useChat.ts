@@ -1,38 +1,63 @@
-import { useDispatch, useSelector } from "react-redux";
-
-import { RootState } from "@/redux/store";
 import {
-  addAttachment,
-  removeAttachment,
-  setPrompt,
-} from "@/redux/prompt/prompt.slice";
+  setActiveConversation,
+  setCurrentState,
+  setWebSearchContent,
+  setRetrievedContext,
+} from "@/redux/conversation/conversation.slice";
+import { RootState } from "@/redux/store";
+import { useSelector, useDispatch } from "react-redux";
 
-export const useChat = () => {
+const useChat = () => {
   const dispatch = useDispatch();
-  const { prompt, attachments } = useSelector((state: RootState) => state.chat);
 
-  const updatePrompt = (value: string) => {
-    dispatch(setPrompt(value));
+  const conversations = useSelector(
+    (state: RootState) => state.conversation.conversations
+  );
+  const activeConversationId = useSelector(
+    (state: RootState) => state.conversation.activeConversationId
+  );
+  const currentState = useSelector(
+    (state: RootState) => state.conversation.currentState
+  );
+  const webSearchContent = useSelector(
+    (state: RootState) => state.conversation.webSearchContent
+  );
+  const retrievedContext = useSelector(
+    (state: RootState) => state.conversation.retrievedContext
+  );
+
+  const activeConversation =
+    conversations.find((conv) => conv.id === activeConversationId) || null;
+  const activeChats = activeConversation ? activeConversation.chats : [];
+
+  const updateActiveConversation = (conversationId: string) => {
+    dispatch(setActiveConversation(conversationId));
   };
 
-  const uploadFile = (file: File) => {
-    const fileAttachment = {
-      id: Date.now().toString(),
-      name: file.name,
-      size: file.size,
-    };
-    dispatch(addAttachment(fileAttachment));
+  const updateCurrentState = (state: typeof currentState) => {
+    dispatch(setCurrentState(state));
   };
 
-  const deleteAttachment = (id: string) => {
-    dispatch(removeAttachment(id));
+  const updateWebSearchContent = (content: string | null) => {
+    dispatch(setWebSearchContent(content));
+  };
+
+  const updateRetrievedContext = (context: string | null) => {
+    dispatch(setRetrievedContext(context));
   };
 
   return {
-    prompt,
-    attachments,
-    updatePrompt,
-    uploadFile,
-    deleteAttachment,
+    conversations,
+    activeConversation,
+    activeChats,
+    currentState,
+    webSearchContent,
+    retrievedContext,
+    updateActiveConversation,
+    updateCurrentState,
+    updateWebSearchContent,
+    updateRetrievedContext,
   };
 };
+
+export default useChat;
