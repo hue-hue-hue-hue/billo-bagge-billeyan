@@ -1,29 +1,28 @@
-.flow-diagram {
-  /* Overall layout and positioning */
+.custom-link {
+  stroke: #00f !important; /* Blue path color */
+  stroke-width: 2px !important;
+  fill: none !important;
+  stroke-dasharray: 400 !important; /* Total length of the path */
+  stroke-dashoffset: 400 !important; /* Start at total length */
+  animation: draw 2s linear forwards !important;
 }
 
-.chip {
-  /* Chip styles */
-}
-
-.line {
-  width: 200px;
-  height: 2px;
-  background-color: #fff;
-  animation: flow 2s ease-in-out infinite alternate;
-}
-
-.chip-to-tasks {
-  /* Specific positioning for this line */
-}
-
-/* ... other line classes with specific positioning ... */
-
-@keyframes flow {
-  0% {
-    transform: scaleX(0);
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
   }
-  100% {
-    transform: scaleX(1);
-  }
+}
+
+.text-updater-node {
+  height: 50px;
+  border: 1px solid #eee;
+  padding: 5px;
+  border-radius: 5px;
+  background: white;
+}
+
+.text-updater-node label {
+  display: block;
+  color: #777;
+  font-size: 12px;
 }

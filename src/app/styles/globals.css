@@ -93,4 +93,10 @@ body {
   }
 }
 
+/* hiding react-flow watermark */
+.react-flow__attribution {
+  display: none;
+}
+
 @import "./flowdiagram.css";
+@import "./ripple.css";

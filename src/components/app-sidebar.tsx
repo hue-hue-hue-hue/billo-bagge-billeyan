@@ -84,10 +84,9 @@ export function AppSidebar() {
               <div className="mt-4 space-y-2 pl-4 flex flex-col items-start justify-start">
                 {conversations.map(
                   (conversation: { id: string; title: string }) => (
-                    <div className="flex w-full">
+                    <div className="flex w-full" key={conversation.id}>
                       <button
                         onClick={() => handleConversationClick(conversation.id)}
-                        key={conversation.id}
                         className="truncate hover:text-[#A2BCE4]"
                       >
                         {conversation.title}
