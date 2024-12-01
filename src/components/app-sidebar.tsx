@@ -18,12 +18,22 @@ import LIBRARYSVG from "@/assets/icons/library.svg";
 import Image from "next/image";
 import Link from "next/link";
 import useChat from "@/hooks/useChat";
+import { useAppDispatch } from "@/redux/store";
+import { setActiveConversation } from "@/redux/conversation/conversation.slice";
+import { useRouter } from "next/navigation";
 
 export function AppSidebar() {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
   const { open, toggleSidebar } = useSidebar();
   const { conversations } = useChat();
   const handleLibraryClick = () => {
     if (!open) toggleSidebar();
+  };
+
+  const handleConversationClick = (id: string) => {
+    dispatch(setActiveConversation(id));
+    router.push(`/conversation/${id}`);
   };
 
   return (
@@ -71,16 +81,18 @@ export function AppSidebar() {
               </div>
             </SidebarMenuButton>
             {open && conversations.length && (
-              <div className="mt-4 space-y-2 pl-4 flex flex-col">
+              <div className="mt-4 space-y-2 pl-4 flex flex-col items-start justify-start">
                 {conversations.map(
                   (conversation: { id: string; title: string }) => (
-                    <Link
-                      href={`/conversation/${conversation.id}`}
-                      key={conversation.id}
-                      className="text-base cursor-pointer hover:underline"
-                    >
-                      {conversation.title}
-                    </Link>
+                    <div className="flex w-full">
+                      <button
+                        onClick={() => handleConversationClick(conversation.id)}
+                        key={conversation.id}
+                        className="truncate hover:text-[#A2BCE4]"
+                      >
+                        {conversation.title}
+                      </button>
+                    </div>
                   )
                 )}
               </div>

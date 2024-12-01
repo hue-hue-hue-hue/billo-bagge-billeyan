@@ -25,19 +25,19 @@ const ChatInput: React.FC = () => {
 
   return (
     <div className="flex flex-col bg-[#141415] border border-[#313131] p-4 rounded-lg shadow-lg w-full mx-auto">
-      <div className="mb-2">
+      <div className="mb-2 flex gap-5 flex-wrap">
         {attachments.map((file) => (
           <div
             key={file.id}
-            className="flex items-center justify-between bg-gray-200 px-3 py-1 mb-1 rounded"
+            className="flex flex-col w-40 bg-gray-700 items-center justify-between px-3 py-1 mb-1 rounded"
           >
-            <span className="text-sm truncate">{file.name}</span>
             <button
               onClick={() => deleteAttachment(file.id)}
               className="text-red-500 text-xs hover:underline"
             >
               Remove
             </button>
+            <span className="text-sm w-full truncate">{file.name}</span>
           </div>
         ))}
       </div>

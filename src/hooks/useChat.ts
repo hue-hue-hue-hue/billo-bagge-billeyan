@@ -47,6 +47,7 @@ const useChat = () => {
   };
 
   return {
+    activeConversationId,
     conversations,
     activeConversation,
     activeChats,

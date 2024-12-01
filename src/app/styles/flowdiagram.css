@@ -1,0 +1,29 @@
+.flow-diagram {
+  /* Overall layout and positioning */
+}
+
+.chip {
+  /* Chip styles */
+}
+
+.line {
+  width: 200px;
+  height: 2px;
+  background-color: #fff;
+  animation: flow 2s ease-in-out infinite alternate;
+}
+
+.chip-to-tasks {
+  /* Specific positioning for this line */
+}
+
+/* ... other line classes with specific positioning ... */
+
+@keyframes flow {
+  0% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
