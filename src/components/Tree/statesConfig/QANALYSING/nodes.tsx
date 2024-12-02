@@ -15,7 +15,7 @@ export const qanalysingNodes = [
     data: {
       label: "Semantic Analysis",
       color: "#FF8F8F",
-      hierarchy: "CHILD",
+      hierarchy: "LASTCHILD",
     },
     position: { x: 360, y: -25 },
   },
@@ -25,7 +25,7 @@ export const qanalysingNodes = [
     data: {
       label: "Context Mapping",
       color: "#FF6B6B",
-      hierarchy: "CHILD",
+      hierarchy: "LASTCHILD",
     },
     position: { x: 360, y: 26 },
   },

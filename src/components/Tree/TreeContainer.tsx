@@ -1,16 +1,79 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTreeTransition } from "@/hooks/useTreeTransition";
 import { useAppDispatch } from "@/redux/store";
-import { setActiveTreeIndex } from "@/redux/tree/tree.slice";
+import {
+  setActiveTreeIndex,
+  addTree,
+  setTreeState,
+} from "@/redux/tree/tree.slice";
+import { getTreeConfig } from "@/config/treeConfigs";
+import { TreeState } from "@/utils/types";
 import RenderTree from "./Tree";
-import { ChevronUp, ChevronDown } from "lucide-react"; // Using lucide-react for icons
+import { ChevronUp, ChevronDown } from "lucide-react";
+
+const STATES_TO_ADD = [
+  TreeState.QRECEIVED,
+  TreeState.RETRIEVING,
+  TreeState.QANALYSING,
+];
 
 const TreeContainer = () => {
   const dispatch = useAppDispatch();
   const { treeHistory, activeTreeIndex } = useTreeTransition();
+
+  // Simulate state additions
+  useEffect(() => {
+    let currentIndex = -1;
+
+    const addNextState = () => {
+      if (currentIndex < STATES_TO_ADD.length) {
+        const nextState = STATES_TO_ADD[currentIndex];
+        const treeConfig = getTreeConfig(nextState);
+
+        if (treeConfig) {
+          // Check if the state is already in the history
+          const isStateAlreadyAdded = treeHistory.some(
+            (tree) => tree.state === nextState
+          );
+
+          if (!isStateAlreadyAdded) {
+            // Add new tree to history
+            dispatch(
+              addTree({
+                state: nextState,
+                nodes: treeConfig.nodes,
+                edges: treeConfig.edges,
+                timestamp: Date.now() + currentIndex,
+              })
+            );
+
+            // Update current state
+            dispatch(setTreeState(nextState));
+          }
+        }
+
+        currentIndex++;
+      }
+    };
+
+    // Add first state immediately
+    addNextState();
+
+    // Add subsequent states with interval
+    const interval = setInterval(() => {
+      addNextState();
+
+      // Clear interval when all states are added
+      if (currentIndex >= STATES_TO_ADD.length) {
+        clearInterval(interval);
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [dispatch, treeHistory]);
 
   const handleNavigation = useCallback(
     (direction: "up" | "down") => {
@@ -29,14 +92,17 @@ const TreeContainer = () => {
     enter: (direction: number) => ({
       y: direction > 0 ? 50 : -50,
       opacity: 0,
+      scale: 0.95,
     }),
     center: {
       y: 0,
       opacity: 1,
+      scale: 1,
     },
     exit: (direction: number) => ({
       y: direction > 0 ? -50 : 50,
       opacity: 0,
+      scale: 0.95,
     }),
   };
 

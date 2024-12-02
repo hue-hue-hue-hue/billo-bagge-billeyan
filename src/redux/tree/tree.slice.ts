@@ -8,34 +8,21 @@ interface TreeSliceState {
   activeTreeIndex: number;
 }
 
-// const initialState: TreeSliceState = {
-//   currentState: TreeState.IDEAL,
-//   treeHistory: [],
-//   activeTreeIndex: -1,
-// };
-const recievingTreeConfig = getTreeConfig(TreeState.QRECEIVING);
-const retrievingTreeConfig = getTreeConfig(TreeState.RETRIEVING);
-const history: TreeData[] = [];
-if (recievingTreeConfig) {
-  history.push({
-    state: TreeState.QRECEIVING,
-    nodes: recievingTreeConfig.nodes,
-    edges: recievingTreeConfig.edges,
-    timestamp: Date.now(),
-  });
-}
-if (retrievingTreeConfig) {
-  history.push({
-    state: TreeState.RETRIEVING,
-    nodes: retrievingTreeConfig.nodes,
-    edges: retrievingTreeConfig.edges,
-    timestamp: Date.now(),
-  });
-}
+const initialTreeConfig = getTreeConfig(TreeState.QRECEIVING);
+
 const initialState: TreeSliceState = {
-  currentState: TreeState.RETRIEVING,
-  treeHistory: history,
-  activeTreeIndex: 1,
+  currentState: TreeState.QRECEIVING,
+  treeHistory: initialTreeConfig
+    ? [
+        {
+          nodes: initialTreeConfig.nodes,
+          edges: initialTreeConfig.edges,
+          state: TreeState.QRECEIVING,
+          timestamp: Date.now(),
+        },
+      ]
+    : [],
+  activeTreeIndex: 0,
 };
 
 const treeSlice = createSlice({
