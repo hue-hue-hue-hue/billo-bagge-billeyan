@@ -1,6 +1,7 @@
 "use client";
 
 import RenderTree from "@/components/Tree/Tree";
+import TreeContainer from "@/components/Tree/TreeContainer";
 
 import useChat from "@/hooks/useChat";
 import { setActiveConversation } from "@/redux/conversation/conversation.slice";
@@ -30,9 +31,11 @@ const Page = ({ params }: { params: { id: string } }) => {
           );
         })}
       </div>
-      <div className="w-3/4 h-[10rem] border">
+      {/* <div className="w-3/4 h-[10rem] border">
         <RenderTree />
-      </div>
+      </div> */}
+
+      <TreeContainer />
     </div>
   );
 };

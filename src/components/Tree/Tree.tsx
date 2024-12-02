@@ -8,11 +8,13 @@ import {
   useEdgesState,
   EdgeTypes,
   Node,
+  Edge,
+  NodeAddChange,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { initialNodes } from "./nodes";
+// import { initialNodes } from "./nodes";
 import CustomNode from "./CustomNode";
-import { initialEdges } from "./edges";
+// import { initialEdges } from "./edges";
 import GradientEdge from "./GradientEdge";
 
 const nodeTypes = { customNode: CustomNode };
@@ -21,7 +23,13 @@ const edgeTypes: EdgeTypes = {
   gradient: GradientEdge,
 };
 
-function RenderTree() {
+function RenderTree({
+  initialNodes,
+  initialEdges,
+}: {
+  initialNodes: Node[];
+  initialEdges: Edge[];
+}) {
   const [nodes, _, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
@@ -80,7 +88,9 @@ function RenderTree() {
 
   return (
     <div className="h-full border">
-      <DynamicFlowContent />
+      <ReactFlowProvider>
+        <DynamicFlowContent />
+      </ReactFlowProvider>
     </div>
   );
 }

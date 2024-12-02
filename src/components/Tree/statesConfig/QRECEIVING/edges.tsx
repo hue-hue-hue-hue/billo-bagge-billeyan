@@ -1,4 +1,4 @@
-export const initialEdges = [
+export const qrecievingEdges = [
   {
     id: "e1-2",
     source: "1",
