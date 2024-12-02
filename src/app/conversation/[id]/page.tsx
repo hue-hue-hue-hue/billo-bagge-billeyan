@@ -1,6 +1,6 @@
 "use client";
 
-import RenderTree from "@/components/Tree/Tree";
+import ChatInput from "@/components/chat/chatInput";
 import TreeContainer from "@/components/Tree/TreeContainer";
 
 import useChat from "@/hooks/useChat";
@@ -18,8 +18,8 @@ const Page = ({ params }: { params: { id: string } }) => {
   }, []);
 
   return (
-    <div className="relative w-full h-full flex flex-col items-center py-5">
-      <div className="flex flex-col w-3/4 gap-3">
+    <div className="relative h-screen flex flex-col items-center justify-between py-5 w-full">
+      <div className="flex flex-col h-full overflow-y-scroll gap-3 w-3/4">
         {activeConversation?.chats.map((chat, idx) => {
           return (
             <div
@@ -30,12 +30,13 @@ const Page = ({ params }: { params: { id: string } }) => {
             </div>
           );
         })}
+        <div>
+          <TreeContainer />
+        </div>
       </div>
-      {/* <div className="w-3/4 h-[10rem] border">
-        <RenderTree />
-      </div> */}
-
-      <TreeContainer />
+      <div className="w-3/4">
+        <ChatInput />
+      </div>
     </div>
   );
 };

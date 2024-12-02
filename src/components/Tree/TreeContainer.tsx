@@ -107,9 +107,33 @@ const TreeContainer = () => {
   };
 
   return (
-    <div className="relative w-3/4 h-[15rem] min-h-[10rem]">
+    <div className="relative h-64 flex items-center sm:w-[44rem] w-full">
       {/* Navigation Buttons */}
-      <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-10">
+
+      <div className="h-full w-full rounded-lg overflow-hidden relative">
+        <AnimatePresence initial={false} custom={activeTreeIndex}>
+          <motion.div
+            key={treeHistory[activeTreeIndex]?.state}
+            custom={activeTreeIndex}
+            variants={treeVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              type: "spring",
+              stiffness: 300,
+              damping: 30,
+            }}
+            className="h-full w-fullabsolute top-0 left-0"
+          >
+            <RenderTree
+              initialNodes={treeHistory[activeTreeIndex]?.nodes || []}
+              initialEdges={treeHistory[activeTreeIndex]?.edges || []}
+            />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+      <div className=" right-4 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-10">
         <button
           onClick={() => handleNavigation("up")}
           disabled={activeTreeIndex === 0}
@@ -137,33 +161,8 @@ const TreeContainer = () => {
           <ChevronDown className="w-4 h-4 text-white" />
         </button>
       </div>
-
-      <div className="h-full w-full border rounded-lg overflow-hidden relative">
-        <AnimatePresence initial={false} custom={activeTreeIndex}>
-          <motion.div
-            key={treeHistory[activeTreeIndex]?.state}
-            custom={activeTreeIndex}
-            variants={treeVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{
-              type: "spring",
-              stiffness: 300,
-              damping: 30,
-            }}
-            className="h-full w-full absolute top-0 left-0"
-          >
-            <RenderTree
-              initialNodes={treeHistory[activeTreeIndex]?.nodes || []}
-              initialEdges={treeHistory[activeTreeIndex]?.edges || []}
-            />
-          </motion.div>
-        </AnimatePresence>
-
-        <div className="absolute bottom-2 right-2 bg-gray-800 px-2 py-1 rounded text-xs text-white">
-          {activeTreeIndex + 1} / {treeHistory.length}
-        </div>
+      <div className="absolute bottom-2 right-2 bg-gray-800 px-2 py-1 rounded text-xs text-white">
+        {activeTreeIndex + 1} / {treeHistory.length}
       </div>
     </div>
   );

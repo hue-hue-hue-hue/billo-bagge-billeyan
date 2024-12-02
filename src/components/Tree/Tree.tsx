@@ -79,6 +79,7 @@ function RenderTree({
           padding: 0.1,
           duration: 300, // Smooth transition
         }}
+        maxZoom={1.5}
         nodesDraggable={false}
         panOnDrag={false}
         zoomOnScroll={false}
@@ -87,7 +88,7 @@ function RenderTree({
   };
 
   return (
-    <div className="h-full border">
+    <div className="h-full">
       <ReactFlowProvider>
         <DynamicFlowContent />
       </ReactFlowProvider>
