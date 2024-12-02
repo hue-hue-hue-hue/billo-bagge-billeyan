@@ -30,7 +30,7 @@ const Page = ({ params }: { params: { id: string } }) => {
           );
         })}
       </div>
-      <div className="w-3/4 h-[30rem] border">
+      <div className="w-3/4 h-[10rem] border">
         <RenderTree />
       </div>
     </div>
