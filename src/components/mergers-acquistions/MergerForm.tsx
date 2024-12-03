@@ -61,7 +61,7 @@ const MergerForm: React.FC = () => {
   };
 
   return (
-    <div className="p-6 bg-neutral-900 text-white rounded-lg max-w-3xl mx-auto">
+    <div className="p-6 bg-neutral-900 text-white rounded-lg max-w-3xl">
       <h1 className="text-2xl font-semibold mb-4">
         Upload Documents and Specify Requirements
       </h1>
