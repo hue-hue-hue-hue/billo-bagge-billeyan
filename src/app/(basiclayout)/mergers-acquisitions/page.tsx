@@ -1,3 +1,6 @@
+"use client";
+import MergerForm from "@/components/mergers-acquistions/MergerForm";
+
 import {
   ResizableHandle,
   ResizablePanel,
@@ -6,8 +9,8 @@ import {
 
 const MergerAndAcquistion = () => {
   return (
-    <div className="w-full h-screen">
-      <ResizablePanelGroup direction="horizontal">
+    <div className="w-full h-screen flex items-center justify-center">
+      {/* <ResizablePanelGroup direction="horizontal">
         <ResizablePanel minSize={50}>
           <object
             data="https://arxiv.org/pdf/2005.11401"
@@ -25,7 +28,8 @@ const MergerAndAcquistion = () => {
         <ResizablePanel minSize={30} defaultSize={40}>
           Two
         </ResizablePanel>
-      </ResizablePanelGroup>
+      </ResizablePanelGroup> */}
+      <MergerForm />
     </div>
   );
 };

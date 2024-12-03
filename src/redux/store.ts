@@ -4,11 +4,13 @@ import { TypedUseSelectorHook } from "react-redux";
 import chatReducer from "./prompt/prompt.slice";
 import conversationReducer from "./conversation/conversation.slice";
 import treeReducer from "./tree/tree.slice";
+import mergerFormReducer from "./mergers-acquisitions/form.slice";
 const store = configureStore({
   reducer: {
     chat: chatReducer,
     conversation: conversationReducer,
     tree: treeReducer,
+    mergerForm: mergerFormReducer,
   },
 });
 
