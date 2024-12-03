@@ -1,3 +1,5 @@
+"use client";
+import ChatInput from "@/components/chat/chatInput";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -8,7 +10,14 @@ const Page = ({ params }: { params: { id: string } }) => {
   return (
     <div className="w-full h-screen">
       <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel minSize={50}>
+        <ResizablePanel minSize={30} className="flex flex-col gap-4 p-5">
+          <div className="border-b-2 pb-2 text-lg">Document Analysis</div>
+          <div className="h-full border">samosa</div>
+          <ChatInput />
+        </ResizablePanel>
+
+        <ResizableHandle />
+        <ResizablePanel minSize={30} defaultSize={35}>
           <object
             data="https://arxiv.org/pdf/2005.11401"
             type="application/pdf"
@@ -20,10 +29,6 @@ const Page = ({ params }: { params: { id: string } }) => {
               <a href="https://arxiv.org/pdf/2005.11401">to the PDF!</a>
             </p>
           </object>
-        </ResizablePanel>
-        <ResizableHandle />
-        <ResizablePanel minSize={30} defaultSize={40}>
-          id: {params.id}
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
