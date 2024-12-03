@@ -98,5 +98,10 @@ body {
   display: none;
 }
 
+li {
+  /* styles all li elements*/
+  list-style-type: none;
+}
+
 @import "./flowdiagram.css";
 @import "./ripple.css";

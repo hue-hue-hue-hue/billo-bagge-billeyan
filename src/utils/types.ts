@@ -57,3 +57,11 @@ export interface TreeData {
   edges: Edge[];
   timestamp: number;
 }
+
+export interface FlagCardProps {
+  type: "caution" | "risk";
+  title: string;
+  fault: string;
+  description: string;
+  order: number;
+}

@@ -87,7 +87,6 @@ const TreeContainer = () => {
     [activeTreeIndex, treeHistory.length, dispatch]
   );
 
-  // Variants for tree animations
   const treeVariants = {
     enter: (direction: number) => ({
       y: direction > 0 ? 50 : -50,
@@ -107,9 +106,7 @@ const TreeContainer = () => {
   };
 
   return (
-    <div className="relative h-64 flex items-center sm:w-[44rem] w-full">
-      {/* Navigation Buttons */}
-
+    <div className="relative h-64 flex items-center border px-2 rounded-sm w-full">
       <div className="h-full w-full rounded-lg overflow-hidden relative">
         <AnimatePresence initial={false} custom={activeTreeIndex}>
           <motion.div
