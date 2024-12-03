@@ -1,4 +1,4 @@
-export const initialNodes = [
+export const qrecievedNodes = [
   {
     id: "1",
     type: "customNode",

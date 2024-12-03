@@ -10,7 +10,7 @@ function CustomNode({
     label?: string;
     rippleColor?: string;
     color?: string;
-    type: "START" | "INTERMEDIATE" | "END";
+    hierarchy: "PARENT" | "CHILD" | "LASTCHILD" | "NONE";
   };
   isConnectable: boolean;
 }) {
@@ -27,7 +27,7 @@ function CustomNode({
 
   return (
     <div className="border border-[#313131] px-5 py-1 rounded-full">
-      {data.type != "START" && (
+      {data.hierarchy != "PARENT" && (
         <Handle
           type="target"
           position={Position.Left}
@@ -40,11 +40,12 @@ function CustomNode({
         {data.rippleColor && <Ripple color={data.rippleColor} />}
         <p className="font-light text-sm">{data.label}</p>
       </div>
-      {data.type != "END" && (
+      {data.hierarchy != "LASTCHILD" && (
         <Handle
           type="source"
           position={Position.Right}
           id={`b-${data.label}`}
+          style={{ ...DEFAULT_HANDLE_STYLE, background: data.color }}
           isConnectable={isConnectable}
         />
       )}

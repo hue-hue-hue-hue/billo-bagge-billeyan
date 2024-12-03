@@ -1,3 +1,5 @@
+import { Edge, Node } from "@xyflow/react";
+
 export type Chat = {
   message: string;
   role: "USER" | "RAG" | "INTERMEDIATE";
@@ -38,3 +40,28 @@ export type PromptState = {
   prompt: string;
   attachments: FileAttachment[];
 };
+
+export enum TreeState {
+  IDEAL = "IDEAL",
+  QRECEIVING = "QRECEIVING",
+  QRECEIVED = "QRECEIVED",
+  QCLASSIFYING = "QCLASSIFYING",
+  QANALYSING = "QANALYSING",
+  QANALYSED = "QANALYSED",
+  RETRIEVING = "RETRIEVING",
+}
+
+export interface TreeData {
+  state: TreeState;
+  nodes: Node[];
+  edges: Edge[];
+  timestamp: number;
+}
+
+export interface FlagCardProps {
+  type: "caution" | "risk";
+  title: string;
+  fault: string;
+  description: string;
+  order: number;
+}
