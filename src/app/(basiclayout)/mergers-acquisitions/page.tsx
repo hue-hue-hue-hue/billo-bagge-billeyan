@@ -1,31 +1,15 @@
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
+"use client";
+import MergerForm from "@/components/mergers-acquistions/MergerForm";
 
 const MergerAndAcquistion = () => {
   return (
-    <div className="w-full h-screen">
-      <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel minSize={50}>
-          <object
-            data="https://arxiv.org/pdf/2005.11401"
-            type="application/pdf"
-            width="100%"
-            height="100%"
-          >
-            <p>
-              Alternative text - include a link{" "}
-              <a href="https://arxiv.org/pdf/2005.11401">to the PDF!</a>
-            </p>
-          </object>
-        </ResizablePanel>
-        <ResizableHandle />
-        <ResizablePanel minSize={30} defaultSize={40}>
-          Two
-        </ResizablePanel>
-      </ResizablePanelGroup>
+    <div className="w-full h-screen flex flex-col justify-between py-5 px-20">
+      <h1 className="w-full text-xl font-semibold border-b-2 pb-1">
+        Merger and Acquisition agent
+      </h1>
+      <div className="h-full flex items-center justify-center">
+        <MergerForm />
+      </div>
     </div>
   );
 };

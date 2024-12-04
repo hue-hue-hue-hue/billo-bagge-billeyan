@@ -1,5 +1,5 @@
 import { conversations } from "@/utils/dummy";
-import { ChatState, Chat } from "@/utils/types";
+import { ChatState, Chat, Conversation } from "@/utils/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: ChatState = {
@@ -16,14 +16,10 @@ const chatSlice = createSlice({
   reducers: {
     addConversation(
       state,
-      action: PayloadAction<{ id: string; title: string }>
+      action: PayloadAction<{ conversation: Conversation }>
     ) {
-      state.conversations.push({
-        id: action.payload.id,
-        title: action.payload.title,
-        chats: [],
-      });
-      state.activeConversationId = action.payload.id;
+      state.conversations.push(action.payload.conversation);
+      state.activeConversationId = action.payload.conversation.id;
     },
 
     setActiveConversation(state, action: PayloadAction<string>) {
