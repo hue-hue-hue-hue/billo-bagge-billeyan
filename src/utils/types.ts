@@ -65,3 +65,22 @@ export interface FlagCardProps {
   description: string;
   order: number;
 }
+
+export interface AnalysisType {
+  type: string;
+  score: number;
+}
+
+export interface InsightDetails {
+  type: string;
+  description: string;
+  [key: string]: string | string[];
+}
+
+export interface InsigtsAnalysis {
+  title: string;
+  summary: string;
+  analysis: AnalysisType[];
+  insights: InsightDetails[];
+  recommendedActions: string[];
+}

@@ -6,50 +6,23 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { Tabs, TabsList } from "@/components/ui/tabs";
+import { documentsToRender } from "@/utils/dummy";
 import { TabsContent, TabsTrigger } from "@radix-ui/react-tabs";
-
-const documentsToRender = [
-  {
-    title: "Document 1",
-    url: "https://arxiv.org/pdf/2005.11405",
-  },
-  {
-    title: "Document 2",
-    url: "https://arxiv.org/pdf/2005.11402",
-  },
-  {
-    title: "Document 3",
-    url: "https://arxiv.org/pdf/2005.11403",
-  },
-  {
-    title: "Document 4",
-    url: "https://arxiv.org/pdf/2005.11404",
-  },
-  {
-    title: "Document 5",
-    url: "https://arxiv.org/pdf/2005.11405",
-  },
-  {
-    title: "Document 6",
-    url: "https://arxiv.org/pdf/2005.11406",
-  },
-  {
-    title: "Document 7",
-    url: "https://arxiv.org/pdf/2005.11407",
-  },
-  {
-    title: "Document 8",
-    url: "https://arxiv.org/pdf/2005.11408",
-  },
-];
-
+import { expandedDummyAnalysis } from "@/utils/dummy";
+import InsightsRenderer from "@/components/mergers-acquistions/InsightsRenderer";
 const Page = ({ params }: { params: { id: string } }) => {
   return (
-    <div className="w-full h-screen">
+    <div className="w-full h-screen font-sans">
       <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel minSize={30} className="flex flex-col gap-4 p-5">
-          <div className="border-b-2 pb-2 text-lg">Document Analysis</div>
-          <div className="h-full border">samosa</div>
+        <ResizablePanel
+          minSize={30}
+          className="flex flex-col justify-between h-screen gap-2 p-5"
+          defaultSize={60}
+        >
+          <h1 className="border-b-2 pb-1 text-lg">Document Analysis</h1>
+          <div className="h-full overflow-y-scroll">
+            <InsightsRenderer insightData={expandedDummyAnalysis} />
+          </div>
           <ChatInput />
         </ResizablePanel>
 
