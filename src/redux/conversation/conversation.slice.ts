@@ -1,19 +1,21 @@
-import { conversations } from "@/utils/dummy";
-import { ChatState, Chat, Conversation } from "@/utils/types";
+import { Chat, ChatState, Conversation } from "@/utils/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: ChatState = {
-  conversations: conversations,
+  conversations: [],
   activeConversationId: null,
-  currentState: "WAIT",
-  webSearchContent: null,
-  retrievedContext: null,
 };
 
 const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
+    setActiveConversationId(state, action: PayloadAction<string>) {
+      state.activeConversationId = action.payload;
+    },
+    addConversations(state, action: PayloadAction<Conversation[]>) {
+      state.conversations = action.payload;
+    },
     addConversation(
       state,
       action: PayloadAction<{ conversation: Conversation }>
@@ -22,53 +24,41 @@ const chatSlice = createSlice({
       state.activeConversationId = action.payload.conversation.id;
     },
 
+    updateConversation(
+      state,
+      action: PayloadAction<{ conversation: Conversation }>
+    ) {
+      const index = state.conversations.findIndex(
+        (conv) => conv.id === action.payload.conversation.id
+      );
+      if (index !== -1) {
+        state.activeConversationId = action.payload.conversation.id;
+        state.conversations[index] = action.payload.conversation;
+      }
+    },
+
     setActiveConversation(state, action: PayloadAction<string>) {
       state.activeConversationId = action.payload;
     },
-
-    addChat(state, action: PayloadAction<Chat>) {
-      const activeConversation = state.conversations.find(
+    addUserChat(state, action: PayloadAction<string>) {
+      const conversation = state.conversations.find(
         (conv) => conv.id === state.activeConversationId
       );
-      if (activeConversation) {
-        activeConversation.chats.push(action.payload);
-      }
-    },
-
-    setCurrentState(state, action: PayloadAction<ChatState["currentState"]>) {
-      state.currentState = action.payload;
-    },
-
-    setWebSearchContent(state, action: PayloadAction<string | null>) {
-      state.webSearchContent = action.payload;
-    },
-
-    setRetrievedContext(state, action: PayloadAction<string | null>) {
-      state.retrievedContext = action.payload;
-    },
-
-    clearActiveConversation(state) {
-      const activeConversation = state.conversations.find(
-        (conv) => conv.id === state.activeConversationId
-      );
-      if (activeConversation) {
-        activeConversation.chats = [];
-      }
-      state.currentState = "WAIT";
-      state.webSearchContent = null;
-      state.retrievedContext = null;
+      conversation?.chats.push({
+        message: action.payload,
+        order: conversation.chats.length,
+        role: "USER",
+      });
     },
   },
 });
 
 export const {
   addConversation,
+  addConversations,
+  updateConversation,
   setActiveConversation,
-  addChat,
-  setCurrentState,
-  setWebSearchContent,
-  setRetrievedContext,
-  clearActiveConversation,
+  setActiveConversationId,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

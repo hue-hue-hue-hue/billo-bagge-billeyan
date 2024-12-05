@@ -1,72 +1,43 @@
-import { usePrompt } from "@/hooks/usePrompt";
-import { useRef } from "react";
-import ATTACHSVG from "@/assets/icons/attachment.svg";
+import { useState } from "react";
+
 import UPARRSVG from "@/assets/icons/uparr.svg";
 import Image from "next/image";
+import useChat from "@/hooks/useChat";
 
 const ChatInput: React.FC = () => {
-  const { prompt, attachments, updatePrompt, uploadFile, deleteAttachment } =
-    usePrompt();
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      Array.from(e.target.files).forEach((file) => uploadFile(file));
-      if (fileInputRef.current) fileInputRef.current.value = ""; // Reset file input
-    }
-  };
+  const { sendMessage } = useChat();
+  const [prompt, setPrompt] = useState("");
 
   const handleSend = () => {
     if (!prompt.trim()) return;
-    console.log("Prompt sent:", prompt);
-    console.log("Attached files:", attachments);
-    updatePrompt("");
+    sendMessage(prompt);
+    setPrompt("");
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
   };
 
   return (
     <div className="flex flex-col bg-[#141415] border border-[#313131] p-4 rounded-lg shadow-lg w-full mx-auto">
-      <div className="mb-2 flex gap-5 flex-wrap">
-        {attachments.map((file) => (
-          <div
-            key={file.id}
-            className="flex flex-col w-40 bg-gray-700 items-center justify-between px-3 py-1 mb-1 rounded"
-          >
-            <button
-              onClick={() => deleteAttachment(file.id)}
-              className="text-red-500 text-xs hover:underline"
-            >
-              Remove
-            </button>
-            <span className="text-sm w-full truncate">{file.name}</span>
-          </div>
-        ))}
-      </div>
       <textarea
         value={prompt}
-        onChange={(e) => updatePrompt(e.target.value)}
+        onChange={(e) => setPrompt(e.target.value)}
+        onKeyPress={handleKeyPress}
         placeholder="Write your prompt..."
-        className="relative flex items-center bg-transparent rounded-lg outline-none resize-none"
+        className="relative flex items-center bg-transparent rounded-lg outline-none resize-none min-h-[40px] max-h-[200px]"
       />
 
-      <div className="flex items-center justify-between">
-        <button
-          onClick={() => fileInputRef.current?.click()}
-          className="border border-[#313131] rounded-lg p-2"
-        >
-          <Image src={ATTACHSVG} alt="attach" />
-        </button>
-        <input
-          ref={fileInputRef}
-          type="file"
-          multiple
-          onChange={handleFileChange}
-          className="hidden"
-        />
+      <div className="flex items-center justify-end mt-2">
         <button
           onClick={handleSend}
+          disabled={!prompt.trim()}
           className="border border-[#313131] rounded-lg p-[9px] hover:border-[#5b5b5b] text-[#5b5b5b] transition-all"
         >
-          <Image src={UPARRSVG} alt="enter" />
+          <Image src={UPARRSVG} alt="send" />
         </button>
       </div>
     </div>

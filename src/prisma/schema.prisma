@@ -1,0 +1,21 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mongodb"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+type ConversationsChats {
+  message String
+  order   Int
+  role    String
+}
+
+model conversations {
+  id    String               @id @map("_id")
+  chats ConversationsChats[]
+  title String
+}

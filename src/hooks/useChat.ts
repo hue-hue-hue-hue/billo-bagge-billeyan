@@ -1,63 +1,46 @@
-import {
-  setActiveConversation,
-  setCurrentState,
-  setWebSearchContent,
-  setRetrievedContext,
-} from "@/redux/conversation/conversation.slice";
-import { RootState } from "@/redux/store";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { RootState, useAppDispatch } from "@/redux/store";
+import { useQueryWebSocket } from "./useQueryWebSocket";
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { setActiveConversationId } from "@/redux/conversation/conversation.slice";
 
 const useChat = () => {
-  const dispatch = useDispatch();
+  const pathname = usePathname();
+  const dispatch = useAppDispatch();
+  const { sendQuery } = useQueryWebSocket();
+  const webSearchContent = "";
+  const retrievedContext = "";
+
+  const activeConversationId = useSelector(
+    (state: RootState) => state.conversation.activeConversationId
+  );
 
   const conversations = useSelector(
     (state: RootState) => state.conversation.conversations
   );
-  const activeConversationId = useSelector(
-    (state: RootState) => state.conversation.activeConversationId
-  );
-  const currentState = useSelector(
-    (state: RootState) => state.conversation.currentState
-  );
-  const webSearchContent = useSelector(
-    (state: RootState) => state.conversation.webSearchContent
-  );
-  const retrievedContext = useSelector(
-    (state: RootState) => state.conversation.retrievedContext
+
+  const activeConversation = conversations.find(
+    (conv) => conv.id === activeConversationId
   );
 
-  const activeConversation =
-    conversations.find((conv) => conv.id === activeConversationId) || null;
-  const activeChats = activeConversation ? activeConversation.chats : [];
-
-  const updateActiveConversation = (conversationId: string) => {
-    dispatch(setActiveConversation(conversationId));
+  const sendMessage = (message: string) => {
+    sendQuery(message, activeConversationId || undefined);
   };
-
-  const updateCurrentState = (state: typeof currentState) => {
-    dispatch(setCurrentState(state));
-  };
-
-  const updateWebSearchContent = (content: string | null) => {
-    dispatch(setWebSearchContent(content));
-  };
-
-  const updateRetrievedContext = (context: string | null) => {
-    dispatch(setRetrievedContext(context));
-  };
+  useEffect(() => {
+    if (pathname.startsWith("/conversation/")) {
+      const conversationId = pathname.split("/conversation/")[1];
+      dispatch(setActiveConversationId(conversationId));
+    }
+  }, [pathname, activeConversationId]);
 
   return {
-    activeConversationId,
-    conversations,
+    sendMessage,
     activeConversation,
-    activeChats,
-    currentState,
+    activeConversationId,
     webSearchContent,
     retrievedContext,
-    updateActiveConversation,
-    updateCurrentState,
-    updateWebSearchContent,
-    updateRetrievedContext,
+    conversations,
   };
 };
 
