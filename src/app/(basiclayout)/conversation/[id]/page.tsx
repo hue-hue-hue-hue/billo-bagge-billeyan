@@ -15,7 +15,7 @@ import {
   setActiveConversation,
   setActiveConversationId,
 } from "@/redux/conversation/conversation.slice";
-import { useAppDispatch } from "@/redux/store";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import Image from "next/image";
 import { useEffect } from "react";
 const querytw = "text-4xl text-[#A2BCE4] font-semibold";
@@ -28,14 +28,17 @@ const Page = ({ params }: { params: { id: string } }) => {
     webSearchContent,
     retrievedContext,
     activeConversationId,
+    conversations,
   } = useChat();
+
   // const { toolCalls } = useWebSocketLogs();
   useEffect(() => {
     dispatch(setActiveConversationId(params.id));
-  }, [params.id, dispatch]);
+  }, [params.id, dispatch, activeConversation?.chats.length]);
 
   return (
     <div className="h-screen w-full ">
+      {activeConversation?.chats.length}
       <ResizablePanelGroup direction="horizontal" className=" w-full">
         <ResizablePanel className="w-full flex flex-col items-center justify-between gap-5 px-24 py-5">
           <h1 className="w-full text-lg border-b-2 py-1 text-white! font-sans">

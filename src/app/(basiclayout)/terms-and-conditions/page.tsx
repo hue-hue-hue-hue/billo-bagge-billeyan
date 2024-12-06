@@ -1,31 +1,68 @@
 "use client";
-import ChatInput from "@/components/chat/chatInput";
-import FlagContainer from "@/components/flag/FlagsContainer";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
+import { useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const TermsAndConditions = () => {
+  const [file, setFile] = useState<File | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const handleFileUpload = async () => {
+    if (!file) {
+      setMessage("Please select a file before uploading.");
+      return;
+    }
+
+    setLoading(true);
+    setMessage(null);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file); // Append the file to the FormData object
+
+      const response = await axios.post(
+        `${"http://127.0.0.1:8230"}/submit`, // Replace with your server URL
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Ensure proper headers for file upload
+          },
+        }
+      );
+      console.log(response.data);
+      setMessage(response.data.message);
+      router.push(`/terms-and-conditions/${response.data.conversation_id}`);
+      // Display server response
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      setMessage("Failed to upload the file.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="h-screen w-full">
-      <ResizablePanelGroup direction="horizontal" className="h-full">
-        <ResizablePanel
-          className="p-4 flex flex-col justify-between"
-          defaultSize={65}
-        >
-          <h1 className="text-xl border-b-2">Terms and Condition Analysis</h1>
-          <div className="h-full my-2 py-3 overflow-y-scroll">
-            <p>adsfasdfasd</p>
-          </div>
-          <ChatInput />
-        </ResizablePanel>
-        <ResizableHandle />
-        <ResizablePanel className="h-full">
-          <FlagContainer />
-        </ResizablePanel>
-      </ResizablePanelGroup>
+    <div className="flex items-center justify-center w-full h-screen">
+      <div className="p-4 flex flex-col gap-8">
+        <h1 className="text-4xl">Analyse TnC</h1>
+        <div className="border rounded-lg flex flex-col p-8 gap-5">
+          <h1>Upload Document</h1>
+          <input
+            type="file"
+            onChange={(e) => setFile(e.target.files?.[0] || null)}
+            accept=".pdf,.doc,.docx,.md"
+          />
+          <button
+            onClick={handleFileUpload}
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+            disabled={loading}
+          >
+            {loading ? "Uploading..." : "Upload"}
+          </button>
+          {message && <p className="text-sm text-center">{message}</p>}
+        </div>
+      </div>
     </div>
   );
 };

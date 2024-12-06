@@ -3,13 +3,19 @@ import { useState } from "react";
 import UPARRSVG from "@/assets/icons/uparr.svg";
 import Image from "next/image";
 import useChat from "@/hooks/useChat";
+import { useAppDispatch } from "@/redux/store";
+import { addUserChat } from "@/redux/conversation/conversation.slice";
+import { ApiSDK } from "@/utils/apiSDK";
 
 const ChatInput: React.FC = () => {
-  const { sendMessage } = useChat();
+  const { sendMessage, activeConversation } = useChat();
+  const dispatch = useAppDispatch();
   const [prompt, setPrompt] = useState("");
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!prompt.trim()) return;
+
+    dispatch(addUserChat(prompt));
     sendMessage(prompt);
     setPrompt("");
   };
