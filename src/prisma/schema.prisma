@@ -19,3 +19,31 @@ model conversations {
   chats ConversationsChats[]
   title String
 }
+
+
+type DocumentsInsights {
+  cultural_considerations   String
+  financial_risk_assessment String
+  operational_compatibility String
+  regulatory_compliance     String
+}
+
+model Evaluation {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+}
+
+model Result {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+}
+
+
+model documents {
+  id                   String            @id @default(auto()) @map("_id") @db.ObjectId
+  Definitive_Agreement String            @map("Definitive Agreement")
+  Due_Diligence        String            @map("Due Diligence")
+  Letter_of_Intent     String            @map("Letter of Intent")
+  NDA                  String
+  Term_Sheet           String            @map("Term Sheet")
+  conversation_id      String
+  insights             DocumentsInsights
+}
