@@ -47,7 +47,7 @@ export const ApiSDK = {
     return new Promise<any>(async (resolve, reject) => {
       try {
         const res = await fetch(url, {
-          method: "PUT",
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },

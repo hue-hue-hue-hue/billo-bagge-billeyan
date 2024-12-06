@@ -124,3 +124,21 @@ export interface InsigtsAnalysis {
   insights: InsightDetails[];
   recommendedActions: string[];
 }
+
+export interface Documents {
+  id: string;
+  Definitive_Agreement: string;
+  Due_Diligence: string;
+  Letter_of_Intent: string;
+  NDA: string;
+  Term_Sheet: string;
+  conversation_id: string;
+  insights: DocumentsInsights;
+}
+
+export interface DocumentsInsights {
+  cultural_considerations: string;
+  financial_risk_assessment: string;
+  operational_compatibility: string;
+  regulatory_compliance: string;
+}

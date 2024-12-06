@@ -27,8 +27,10 @@ export const useQueryWebSocket = () => {
 
     ws.current.onmessage = (event) => {
       const data = JSON.parse(event.data);
+      console.log(data.type);
       console.log(data.conversation);
       if (data.type === "request") {
+        console.log("request");
         dispatch(
           addConversation({
             conversation: {
@@ -44,6 +46,7 @@ export const useQueryWebSocket = () => {
       }
 
       if (data.type === "response") {
+        console.log("response");
         dispatch(
           updateConversation({
             conversation: {

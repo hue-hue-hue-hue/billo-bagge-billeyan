@@ -59,6 +59,7 @@ export const {
   updateConversation,
   setActiveConversation,
   setActiveConversationId,
+  addUserChat,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

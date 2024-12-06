@@ -32,7 +32,12 @@ const useChat = () => {
       const conversationId = pathname.split("/conversation/")[1];
       dispatch(setActiveConversationId(conversationId));
     }
-  }, [pathname, activeConversationId]);
+  }, [
+    pathname,
+    activeConversationId,
+    activeConversation?.chats.length,
+    conversations,
+  ]);
 
   return {
     sendMessage,
