@@ -1,4 +1,10 @@
-import { Chat, Conversation, ChatState, FlagCardProps } from "./types";
+import {
+  Chat,
+  Conversation,
+  ChatState,
+  FlagCardProps,
+  InsigtsAnalysis,
+} from "./types";
 
 const sampleChats = (prefix: string): Chat[] => [
   {
@@ -162,3 +168,184 @@ export const dummyFlags: FlagCardProps[] = [
     order: 10,
   },
 ];
+
+export const documentsToRender = [
+  {
+    title: "Document 1",
+    url: "https://arxiv.org/pdf/2005.11405",
+  },
+  {
+    title: "Document 2",
+    url: "https://arxiv.org/pdf/2005.11402",
+  },
+  {
+    title: "Document 3",
+    url: "https://arxiv.org/pdf/2005.11403",
+  },
+  {
+    title: "Document 4",
+    url: "https://arxiv.org/pdf/2005.11404",
+  },
+  {
+    title: "Document 5",
+    url: "https://arxiv.org/pdf/2005.11405",
+  },
+  {
+    title: "Document 6",
+    url: "https://arxiv.org/pdf/2005.11406",
+  },
+  {
+    title: "Document 7",
+    url: "https://arxiv.org/pdf/2005.11407",
+  },
+  {
+    title: "Document 8",
+    url: "https://arxiv.org/pdf/2005.11408",
+  },
+];
+
+const dummyAnalysis = {
+  title: "Document Insights for Facebook and Amazon Policies Integration",
+  summary:
+    "When the AI agent analyzes the policy documents, it can derive key insights beyond simply merging policies. These insights would support strategic decision-making, ensure smooth integration, and highlight potential risks and opportunities. Here are examples of document insights the agent could provide:",
+  analysis: [
+    {
+      type: "Type1",
+      score: 4.5,
+    },
+    {
+      type: "Type2",
+      score: 3.5,
+    },
+    {
+      type: "Type3",
+      score: 2.5,
+    },
+    {
+      type: "Type4",
+      score: 1.5,
+    },
+  ],
+  insights: [
+    {
+      type: "Alignment Insights",
+      description:
+        "Highlighting areas of synergy and divergence between the two companies to ensure smooth integration and strategic alignment.",
+      overlaps: [
+        "Both companies emphasize ethical standards and human rights (e.g., Amazon's supplier code and Facebook's emphasis on content governance).",
+        "Shared commitment to transparency and accountability in operations and governance.",
+      ],
+      conflicts: [
+        "Facebook's focus on freedom of expression might conflict with Amazon’s supply chain-based compliance, particularly where restrictive laws may exist.",
+        "Discrepancies in reporting structures—Facebook uses independent oversight (Oversight Board), while Amazon employs internal audits.",
+      ],
+    },
+  ],
+};
+
+export const expandedDummyAnalysis: InsigtsAnalysis = {
+  title: "Comprehensive Document Insights for Tech Merger Analysis",
+  summary:
+    "When the AI agent analyzes the policy documents, it can derive key insights beyond simply merging policies. These insights would support strategic decision-making, ensure smooth integration, and highlight potential risks and opportunities. Here are examples of document insights the agent could provide:",
+  analysis: [
+    {
+      type: "Type1",
+      score: 4.5,
+    },
+    {
+      type: "Type2",
+      score: 3.5,
+    },
+    {
+      type: "Type3",
+      score: 2.5,
+    },
+    {
+      type: "Type4",
+      score: 1.5,
+    },
+  ],
+  insights: [
+    {
+      type: "Alignment Insights",
+      description:
+        "Identifying strategic convergence and potential friction points between organizational policies and practices.",
+      overlaps: [
+        "Shared commitment to data privacy and user protection frameworks",
+        "Similar approaches to ethical AI development and responsible technology deployment",
+        "Aligned corporate social responsibility initiatives targeting sustainability and community engagement",
+      ],
+      conflicts: [
+        "Divergent approaches to employee data management and privacy protocols",
+        "Inconsistent intellectual property protection strategies",
+        "Variations in global compliance and regulatory adaptation mechanisms",
+      ],
+    },
+    {
+      type: "Operational Compatibility",
+      description:
+        "Evaluating technical, procedural, and organizational integration potential",
+      technicalIntegration: [
+        "Complementary cloud infrastructure architectures",
+        "Potential challenges in reconciling different software development methodologies",
+        "Variations in cybersecurity implementation and risk management frameworks",
+      ],
+      culturalConsiderations: [
+        "Different organizational decision-making hierarchies",
+        "Contrasting employee performance evaluation and compensation models",
+        "Unique internal communication and collaboration practices",
+      ],
+    },
+    {
+      type: "Financial Risk Assessment",
+      description:
+        "Analyzing potential financial implications and risk mitigation strategies",
+      potentialSynergies: [
+        "Cost reduction through consolidated infrastructure",
+        "Enhanced market penetration by combining user bases",
+        "Streamlined supply chain and procurement processes",
+      ],
+      riskFactors: [
+        "Potential regulatory scrutiny in cross-border technology mergers",
+        "Intellectual property litigation risks",
+        "Employee retention challenges during organizational restructuring",
+      ],
+    },
+    {
+      type: "Regulatory Compliance",
+      description:
+        "Examining legal and regulatory landscape for potential integration challenges",
+      globalComplianceConsiderations: [
+        "Differences in data protection regulations across jurisdictions",
+        "Variations in antitrust and competition law interpretations",
+        "Complexity of reconciling international employment regulations",
+      ],
+      complianceRecommendations: [
+        "Develop unified global compliance framework",
+        "Create cross-functional regulatory adaptation team",
+        "Implement robust monitoring and reporting mechanisms",
+      ],
+    },
+    {
+      type: "Technology Integration",
+      description:
+        "Analyzing technological ecosystem compatibility and integration strategies",
+      technologyAlignment: [
+        "Potential for unified AI and machine learning research platforms",
+        "Opportunities for cross-pollination of technological innovations",
+        "Challenges in reconciling different technology stack architectures",
+      ],
+      integrationChallenges: [
+        "Legacy system compatibility issues",
+        "Potential redundancies in technological infrastructure",
+        "User experience consistency across merged platforms",
+      ],
+    },
+  ],
+  recommendedActions: [
+    "Conduct comprehensive due diligence across all identified insight domains",
+    "Develop a phased integration roadmap addressing key alignment and operational challenges",
+    "Establish a dedicated cross-organizational transformation team",
+    "Create transparent communication channels for stakeholders",
+  ],
+};

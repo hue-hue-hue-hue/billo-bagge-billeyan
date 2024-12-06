@@ -19,8 +19,13 @@ import Image from "next/image";
 import Link from "next/link";
 import useChat from "@/hooks/useChat";
 import { useAppDispatch } from "@/redux/store";
-import { setActiveConversation } from "@/redux/conversation/conversation.slice";
+import {
+  addConversations,
+  setActiveConversation,
+} from "@/redux/conversation/conversation.slice";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { ApiSDK } from "@/utils/apiSDK";
 
 export function AppSidebar() {
   const router = useRouter();
@@ -30,7 +35,21 @@ export function AppSidebar() {
   const handleLibraryClick = () => {
     if (!open) toggleSidebar();
   };
+  useEffect(() => {
+    const fetchConversations = async () => {
+      try {
+        const response = await ApiSDK.getData(
+          `${process.env.NEXT_PUBLIC_APP_BASE_URL}/conversations`,
+          {}
+        );
+        dispatch(addConversations(response.data));
+      } catch (error) {
+        console.error("Error fetching conversations:", error);
+      }
+    };
 
+    fetchConversations();
+  }, []);
   const handleConversationClick = (id: string) => {
     dispatch(setActiveConversation(id));
     router.push(`/conversation/${id}`);
@@ -54,10 +73,10 @@ export function AppSidebar() {
             className="px-6 py-2 bg-transparent border border-black dark:border-slate-600 dark:text-white text-black rounded-lg font-bold transform  transition duration-400"
             asChild
           >
-            <div>
+            <Link href={"/conversation"}>
               <Image src={PLUSSVG} alt="home" />
               <span>New Chat</span>
-            </div>
+            </Link>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarHeader>
