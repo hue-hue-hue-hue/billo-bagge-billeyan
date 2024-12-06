@@ -27,7 +27,7 @@ const MergerForm: React.FC = () => {
     files: FileList | null
   ) => {
     if (!files) return;
-    const fileArray = Array.from(files).slice(0, 10); // Limit to 10 files
+    const fileArray = Array.from(files).slice(0, 10); 
     setFormData((prev) => ({ ...prev, [field]: fileArray }));
   };
 
@@ -76,36 +76,6 @@ const MergerForm: React.FC = () => {
       setLoading(false);
     }
   };
-
-  // Polling effect
-  // useEffect(() => {
-  //   if (pollingStatus !== "polling" || !conversationId) return;
-
-  //   const pollDocuments = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `${process.env.NEXT_PUBLIC_MA_AGENT_URL}/documents/${conversationId}`
-  //       );
-
-  //       if (response.data) {
-  //         setDocumentData(response.data);
-  //         setPollingStatus("completed");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error polling documents:", error);
-  //       // Implement exponential backoff or retry logic
-  //     }
-  //   };
-
-  //   // Initial poll
-  //   pollDocuments();
-
-  //   // Set up interval polling
-  //   const intervalId = setInterval(pollDocuments, 5000); // Poll every 5 seconds
-
-  //   // Cleanup interval on unmount or status change
-  //   return () => clearInterval(intervalId);
-  // }, [conversationId, pollingStatus]);
 
   return (
     <div className="p-6 bg-neutral-900 text-white rounded-lg max-w-3xl">

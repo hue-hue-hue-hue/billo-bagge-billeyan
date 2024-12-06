@@ -19,21 +19,20 @@ const TermsAndConditions = () => {
 
     try {
       const formData = new FormData();
-      formData.append("file", file); // Append the file to the FormData object
+      formData.append("file", file); 
 
       const response = await axios.post(
-        `${"http://127.0.0.1:8230"}/submit`, // Replace with your server URL
+        `${"http://127.0.0.1:8230"}/submit`,
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data", // Ensure proper headers for file upload
+            "Content-Type": "multipart/form-data", 
           },
         }
       );
       console.log(response.data);
       setMessage(response.data.message);
       router.push(`/terms-and-conditions/${response.data.conversation_id}`);
-      // Display server response
     } catch (error) {
       console.error("Error uploading file:", error);
       setMessage("Failed to upload the file.");

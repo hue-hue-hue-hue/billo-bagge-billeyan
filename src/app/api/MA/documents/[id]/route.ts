@@ -7,11 +7,9 @@ export async function GET(
 ) {
   try {
     const samosa = await prisma.documents.findMany();
-    console.log(samosa);
     const document = await prisma.documents.findUnique({
       where: { id: params.id },
     });
-    console.log(document);
 
     if (!document) {
       return NextResponse.json(

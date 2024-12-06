@@ -8,7 +8,7 @@ export type Chat = {
 
 export type Conversation = {
   id: string;
-  title: string; // Title to display in the sidebar -> will use the first chat of the conversation for now.
+  title: string;
   chats: Chat[];
 };
 

@@ -12,9 +12,7 @@ import {
   NodeAddChange,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-// import { initialNodes } from "./nodes";
 import CustomNode from "./CustomNode";
-// import { initialEdges } from "./edges";
 import GradientEdge from "./GradientEdge";
 
 const nodeTypes = { customNode: CustomNode };
@@ -42,23 +40,19 @@ function RenderTree({
   const DynamicFlowContent = () => {
     const { fitView } = useReactFlow();
 
-    // Adjust view on resize
     const handleResize = useCallback(() => {
       fitView({
         padding: 0.1,
         includeHiddenNodes: false,
-        duration: 300, // Smooth transition
+        duration: 300, 
       });
     }, [fitView]);
 
     useEffect(() => {
-      // Fit view immediately after initial render
       handleResize();
 
-      // Add resize listener
       window.addEventListener("resize", handleResize);
 
-      // Cleanup listener
       return () => {
         window.removeEventListener("resize", handleResize);
       };
@@ -77,7 +71,7 @@ function RenderTree({
         fitView
         fitViewOptions={{
           padding: 0.1,
-          duration: 300, // Smooth transition
+          duration: 300,
         }}
         maxZoom={1.5}
         nodesDraggable={false}

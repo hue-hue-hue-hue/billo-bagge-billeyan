@@ -7,7 +7,6 @@ export const ApiSDK = {
         };
         if (body && Object.keys(body).length > 0)
           options.body = JSON.stringify(body);
-        //console.log(url, options);
         const res = await fetch(url, options);
         if (res.ok) {
           const result = await res.json();
@@ -53,7 +52,6 @@ export const ApiSDK = {
           },
           body: JSON.stringify(data),
         });
-        // console.log(await res.json());
         if (res.ok) {
           const result = await res.json();
           return resolve(result);

@@ -31,7 +31,6 @@ const Page = ({ params }: { params: { id: string } }) => {
     conversations,
   } = useChat();
 
-  // const { toolCalls } = useWebSocketLogs();
   useEffect(() => {
     dispatch(setActiveConversationId(params.id));
   }, [params.id, dispatch, activeConversation?.chats.length]);

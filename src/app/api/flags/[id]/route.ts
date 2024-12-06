@@ -1,7 +1,6 @@
 import { prisma } from "@/prisma/db";
 import { NextResponse } from "next/server";
 
-// GET single result
 export async function GET(
   request: Request,
   { params }: { params: { id: string } }
@@ -25,7 +24,6 @@ export async function GET(
   }
 }
 
-// PUT update result
 export async function PUT(
   request: Request,
   { params }: { params: { id: string } }
@@ -47,7 +45,6 @@ export async function PUT(
   }
 }
 
-// PATCH partial update result
 export async function PATCH(
   request: Request,
   { params }: { params: { id: string } }
@@ -69,7 +66,6 @@ export async function PATCH(
   }
 }
 
-// DELETE result
 export async function DELETE(
   request: Request,
   { params }: { params: { id: string } }
