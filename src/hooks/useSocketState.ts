@@ -14,7 +14,7 @@ export const useWebSocketLogs = ({
 }: UseWebSocketLogsOptions = {}) => {
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [toolCalls, setToolCalls] = useState<string[]>([]);
+  const [toolCall, setToolCall] = useState<string | null>(null);
   const dispatch = useAppDispatch();
   // Use useRef to avoid dependency cycles
   const socketRef = useRef<WebSocket | null>(null);
@@ -46,11 +46,12 @@ export const useWebSocketLogs = ({
       };
 
       newSocket.onmessage = (event) => {
-        const info = event.data;
-        if (info.type === "function") {
+        const info = JSON.parse(event.data);
+        console.log(info);
+        if (info.type == "function") {
           const toolName = info.name;
           // Update tool calls state
-          setToolCalls((prev) => [...prev, toolName]);
+          setToolCall(toolCall);
 
           // Call optional callback if provided
           if (onToolCall) {
@@ -90,7 +91,7 @@ export const useWebSocketLogs = ({
   return {
     isConnected,
     error,
-    toolCalls,
+    toolCall,
     connect,
     disconnect,
   };

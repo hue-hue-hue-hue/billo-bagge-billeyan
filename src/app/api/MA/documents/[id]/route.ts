@@ -6,10 +6,10 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const samosa = await prisma.documents.findMany();
-    console.log(samosa);
-    const document = await prisma.documents.findUnique({
-      where: { id: params.id },
+    // const samosa = await prisma.documents.findMany();
+    // console.log(samosa);
+    const document = await prisma.documents.findFirst({
+      where: { conversation_id: params.id },
     });
     console.log(document);
 

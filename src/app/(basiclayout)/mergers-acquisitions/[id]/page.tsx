@@ -123,7 +123,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   prose-a:text-blue-600 prose-p:text-justify prose-img:rounded-xl
   prose-headings:underline`}
                   >
-                    {value}
+                    {value.trim()}
                   </ReactMarkdown>
                 </TabsContent>
               ))}

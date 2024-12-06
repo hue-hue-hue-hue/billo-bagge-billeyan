@@ -30,6 +30,7 @@ const Page = ({ params }: { params: { id: string } }) => {
     activeConversationId,
     conversations,
   } = useChat();
+  const { toolCall } = useWebSocketLogs();
 
   // const { toolCalls } = useWebSocketLogs();
   useEffect(() => {
@@ -64,6 +65,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             })}
             <div className="w-full mt-4">
               <TreeContainer />
+              Agent Calls: {toolCall}
             </div>
           </div>
           <ChatInput />

@@ -7,18 +7,19 @@ import {
   updateConversation,
 } from "@/redux/conversation/conversation.slice";
 import { useAppDispatch } from "@/redux/store";
+import useChat from "./useChat";
 
 export const useQueryWebSocket = () => {
   const pathname = usePathname();
   const ws = useRef<WebSocket | null>(null);
   const dispatch = useAppDispatch();
   const router = useRouter();
-
-  const conversationId = pathname.startsWith("/conversation/")
-    ? pathname.split("/conversation/")[1]
-    : null;
+  const { activeConversation } = useChat();
 
   useEffect(() => {
+    const conversationId = pathname.startsWith("/conversation/")
+      ? pathname.split("/conversation/")[1]
+      : null;
     const wsUrl =
       process.env.NEXT_PUBLIC_WEBSOCKET_QUERY_URL ||
       "ws://localhost:5050/ws/query";
@@ -47,17 +48,27 @@ export const useQueryWebSocket = () => {
 
       if (data.type === "response") {
         console.log("response");
-        dispatch(
-          updateConversation({
-            conversation: {
-              id: data.conversation._id,
-              title: data.conversation.title,
-              chats: data.conversation.chats,
-            },
-          })
-        );
+        console.log("activeConversation", activeConversation?.chats.length);
+        console.log("backend>>>>>>>", data.conversation.chats.length);
+        if (activeConversation?.id === data.conversation._id) {
+          if (
+            activeConversation?.chats.length &&
+            activeConversation?.chats.length < data.conversation.chats.length
+          ) {
+            console.log("updating conversation");
+            dispatch(
+              updateConversation({
+                conversation: {
+                  id: data.conversation._id,
+                  title: data.conversation.title,
+                  chats: data.conversation.chats,
+                },
+              })
+            );
+          }
+        }
       }
-      dispatch(setActiveConversationId(data.conversation._id));
+      // dispatch(setActiveConversationId(data.conversation._id));
     };
 
     return () => {
@@ -65,7 +76,7 @@ export const useQueryWebSocket = () => {
         ws.current.close();
       }
     };
-  }, [dispatch, router, conversationId]);
+  }, [dispatch, router]);
 
   const sendQuery = useCallback((query: string, conversationId?: string) => {
     if (ws.current?.readyState === WebSocket.OPEN) {
