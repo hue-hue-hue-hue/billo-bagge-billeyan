@@ -8,16 +8,40 @@ datasource db {
   relationMode = "prisma"
 }
 
-type ConversationsChats {
-  message String
-  order   Int
-  role    String
+// type ConversationsChats {
+//   message String
+//   order   Int
+//   role    String
+// }
+
+// model conversations {
+//   id    String               @id @map("_id")
+//   chats ConversationsChats[]
+//   title String
+// }
+
+model Chat {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  title         String    @default("New Chat")
+  messages      Message[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  isDeleted     Boolean   @default(false)
 }
 
-model conversations {
-  id    String               @id @map("_id")
-  chats ConversationsChats[]
-  title String
+model Message {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  chatId        String    @db.ObjectId
+  chat          Chat      @relation(fields: [chatId], references: [id])
+  role          MessageRole
+  content       String
+  createdAt     DateTime  @default(now())
+  metadata      Json?
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
 }
 
 
@@ -28,16 +52,16 @@ type DocumentsInsights {
   regulatory_compliance     String
 }
 
-model Evaluation {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-}
+// model Evaluation {
+//   id String @id @default(auto()) @map("_id") @db.ObjectId
+// }
 
-model Result {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-}
+// model Result {
+//   id String @id @default(auto()) @map("_id") @db.ObjectId
+// }
 
 
-model documents {
+model MergerAcquisition {
   id                   String            @id @default(auto()) @map("_id") @db.ObjectId
   Definitive_Agreement String            @map("Definitive Agreement")
   Due_Diligence        String            @map("Due Diligence")

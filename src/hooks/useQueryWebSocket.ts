@@ -1,77 +1,85 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useCallback, useEffect, useMemo } from "react";
+import useWebSocket, { ReadyState } from "react-use-websocket";
+import { usePathname } from "next/navigation";
+import { useChatStore } from "@/zustand/chat";
+import { Message } from "@/utils/types";
 
-import { usePathname, useRouter } from "next/navigation";
-import {
-  addConversation,
-  setActiveConversationId,
-  updateConversation,
-} from "@/redux/conversation/conversation.slice";
-import { useAppDispatch } from "@/redux/store";
+interface WebSocketQueryMessage {
+  type: string;
+  message: Message;
+}
 
 export const useQueryWebSocket = () => {
+  const { addMessageToActiveChat, activeChat } = useChatStore();
   const pathname = usePathname();
-  const ws = useRef<WebSocket | null>(null);
-  const dispatch = useAppDispatch();
-  const router = useRouter();
 
-  const conversationId = pathname.startsWith("/conversation/")
-    ? pathname.split("/conversation/")[1]
-    : null;
+  // Extract conversation ID from pathname
+  const conversationId = useMemo(() => {
+    return pathname.startsWith("/chat/") ? pathname.split("/chat/")[1] : null;
+  }, [pathname]);
 
-  useEffect(() => {
-    const wsUrl =
+  // WebSocket URL
+  const socketUrl = useMemo(
+    () =>
       process.env.NEXT_PUBLIC_WEBSOCKET_QUERY_URL ||
-      "ws://localhost:5050/ws/query";
-    console.log("conversationId", conversationId);
-    ws.current = new WebSocket(wsUrl);
+      "ws://localhost:5050/ws/query",
+    []
+  );
 
-    ws.current.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      console.log(data.type);
-      console.log(data.conversation);
-      if (data.type === "request") {
-        console.log("request");
-        dispatch(
-          addConversation({
-            conversation: {
-              id: data.conversation._id,
-              title: data.conversation.title,
-              chats: data.conversation.chats,
-            },
-          })
-        );
-        if (!conversationId) {
-          router.push(`/conversation/${data.conversation._id}`);
-        }
+  // WebSocket hook
+  const { sendMessage, lastMessage, readyState, lastJsonMessage } =
+    useWebSocket(socketUrl, {
+      shouldReconnect: () => true,
+      retryOnError: true,
+    });
+
+  // Connection status helpers
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: "Connecting",
+    [ReadyState.OPEN]: "Open",
+    [ReadyState.CLOSING]: "Closing",
+    [ReadyState.CLOSED]: "Closed",
+    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  }[readyState];
+
+  // Handle incoming messages
+  const handleIncomingMessage = useCallback(
+    (message: WebSocketQueryMessage) => {
+      if (message?.type === "response") {
+        console.log("Received message:", message.message);
+        addMessageToActiveChat(message.message as Message);
       }
+    },
+    [addMessageToActiveChat]
+  );
 
-      if (data.type === "response") {
-        console.log("response");
-        dispatch(
-          updateConversation({
-            conversation: {
-              id: data.conversation._id,
-              title: data.conversation.title,
-              chats: data.conversation.chats,
-            },
-          })
-        );
-      }
-      dispatch(setActiveConversationId(data.conversation._id));
-    };
-
-    return () => {
-      if (ws.current) {
-        ws.current.close();
-      }
-    };
-  }, [dispatch, router, conversationId]);
-
-  const sendQuery = useCallback((query: string, conversationId?: string) => {
-    if (ws.current?.readyState === WebSocket.OPEN) {
-      ws.current.send(JSON.stringify({ query, id: conversationId }));
+  // Effect to process incoming messages
+  useEffect(() => {
+    if (lastJsonMessage) {
+      handleIncomingMessage(lastJsonMessage as WebSocketQueryMessage);
     }
-  }, []);
+  }, [lastJsonMessage, handleIncomingMessage]);
 
-  return { sendQuery };
+  // Send query method
+  const sendQuery = useCallback(
+    (query: string, id: string) => {
+      if (readyState === ReadyState.OPEN) {
+        sendMessage(
+          JSON.stringify({
+            query: query,
+            id: id || conversationId,
+          })
+        );
+      }
+    },
+    [sendMessage, readyState, conversationId]
+  );
+
+  return {
+    sendQuery,
+    lastMessage,
+    readyState,
+    connectionStatus,
+    isConnected: readyState === ReadyState.OPEN,
+  };
 };

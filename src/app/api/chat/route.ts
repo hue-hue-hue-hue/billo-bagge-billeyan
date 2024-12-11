@@ -3,9 +3,26 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
-    const json = await request.json();
-    const conversation = await prisma.conversations.create({
-      data: json,
+    const { query } = await request.json();
+    const conversation = await prisma.chat.create({
+      data: {
+        title: query || "New Chat",
+        messages: {
+          // Optionally create first message if initial message exists
+          create: query
+            ? [
+                {
+                  role: "USER",
+                  content: query,
+                },
+              ]
+            : [],
+        },
+      },
+      // Include messages in the response
+      include: {
+        messages: true,
+      },
     });
 
     return NextResponse.json({
@@ -22,7 +39,7 @@ export async function POST(request: Request) {
 
 export async function GET(request: Request) {
   try {
-    const conversations = await prisma.conversations.findMany();
+    const conversations = await prisma.chat.findMany();
 
     return NextResponse.json({ status: "success", data: conversations });
   } catch (e) {

@@ -6,7 +6,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const conversation = await prisma.conversations.findUnique({
+    const conversation = await prisma.chat.findUnique({
       where: { id: params.id },
     });
 
@@ -26,13 +26,36 @@ export async function GET(
   }
 }
 
+// post request to create chat with given id and data
+export async function POST(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const json = await request.json();
+    const conversation = await prisma.chat.create({
+      data: { ...json, id: params.id },
+    });
+
+    return NextResponse.json({
+      status: "success",
+      data: conversation,
+    });
+  } catch (e) {
+    return new NextResponse(JSON.stringify(e), {
+      status: 404,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+}
+
 export async function PATCH(
   request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
     const json = await request.json();
-    const updatedConversation = await prisma.conversations.update({
+    const updatedConversation = await prisma.chat.update({
       where: { id: params.id },
       data: json,
     });
@@ -51,7 +74,7 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    await prisma.conversations.delete({ where: { id: params.id } });
+    await prisma.chat.delete({ where: { id: params.id } });
     return NextResponse.json({
       status: "success",
       message: "Deleted successfully",

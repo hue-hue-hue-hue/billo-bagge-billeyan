@@ -1,10 +1,36 @@
 import { Edge, Node } from "@xyflow/react";
 
+export enum MessageRole {
+  USER = "USER",
+  ASSISTANT = "ASSISTANT",
+}
+
+// Type for Chat
 export type Chat = {
-  message: string;
-  role: "USER" | "RAG";
-  order: number;
+  id: string; // Corresponds to @db.ObjectId
+  title: string;
+  messages: Message[];
+  createdAt: Date;
+  updatedAt: Date;
+  isDeleted: boolean;
 };
+
+// Type for Message
+export type Message = {
+  id: string; // Corresponds to @db.ObjectId
+  chatId: string; // Corresponds to @db.ObjectId
+  chat: Chat; // Relation to Chat
+  role: MessageRole; // Enum
+  content: string;
+  createdAt: Date;
+  metadata?: Record<string, any>; // Corresponds to Json? in Prisma
+};
+
+// export type Chat = {
+//   message: string;
+//   role: "USER" | "RAG";
+//   order: number;
+// };
 
 export type Conversation = {
   id: string;

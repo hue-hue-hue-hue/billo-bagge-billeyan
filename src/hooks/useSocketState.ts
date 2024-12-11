@@ -3,9 +3,16 @@ import { setTreeState } from "@/redux/tree/tree.slice";
 import { getTreeStateFromName } from "@/utils/helpers";
 import { useState, useEffect, useCallback, useRef } from "react";
 
+// ye chal raha h isse nhi chedna h
+
 interface UseWebSocketLogsOptions {
   url?: string;
   onToolCall?: (toolName: string) => void;
+}
+
+interface WebSocketMessage {
+  type: string;
+  name: string;
 }
 
 export const useWebSocketLogs = ({
@@ -44,15 +51,13 @@ export const useWebSocketLogs = ({
         setIsConnected(false);
         socketRef.current = null;
       };
-
       newSocket.onmessage = (event) => {
-        const info = event.data;
+        const res = event.data;
+        const info = JSON.parse(res) as WebSocketMessage;
         if (info.type === "function") {
           const toolName = info.name;
-          // Update tool calls state
           setToolCalls((prev) => [...prev, toolName]);
 
-          // Call optional callback if provided
           if (onToolCall) {
             onToolCall(toolName);
           }
