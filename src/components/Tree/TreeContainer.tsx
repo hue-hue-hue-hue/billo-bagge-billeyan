@@ -14,66 +14,68 @@ import { TreeState } from "@/utils/types";
 import RenderTree from "./Tree";
 import { ChevronUp, ChevronDown } from "lucide-react";
 
-// const STATES_TO_ADD = [
-//   TreeState.QRECEIVED,
-//   TreeState.RETRIEVING,
-//   TreeState.QANALYSING,
-// ];
+const STATES_TO_ADD = [
+  TreeState.SRETRIVAL,
+  TreeState.EXPANDED_QUERY,
+  TreeState.RETRIVAL_CALL,
+  TreeState.RETRIEVED,
+  TreeState.RRF_CALL,
+  TreeState.METRAG_CALL,
+  TreeState.CRAG_CALL,
+  TreeState.COHERE_CALL,
+];
 
 const TreeContainer = () => {
   const dispatch = useAppDispatch();
   const { treeHistory, activeTreeIndex } = useTreeTransition();
 
   // Simulate state additions
-  // useEffect(() => {
-  //   let currentIndex = -1;
+  useEffect(() => {
+    let currentIndex = -1;
 
-  // const addNextState = () => {
-  //   if (currentIndex < STATES_TO_ADD.length) {
-  //     const nextState = STATES_TO_ADD[currentIndex];
-  //     const treeConfig = getTreeConfig(nextState);
+    const addNextState = () => {
+      if (currentIndex < STATES_TO_ADD.length) {
+        const nextState = STATES_TO_ADD[currentIndex];
+        const treeConfig = getTreeConfig(nextState);
 
-  //     if (treeConfig) {
-  //       // Check if the state is already in the history
-  //       const isStateAlreadyAdded = treeHistory.some(
-  //         (tree) => tree.state === nextState
-  //       );
+        if (treeConfig) {
+          // Check if the state is already in the history
+          const isStateAlreadyAdded = treeHistory.some(
+            (tree) => tree.state === nextState
+          );
 
-  //       if (!isStateAlreadyAdded) {
-  //         // Add new tree to history
-  //         dispatch(
-  //           addTree({
-  //             state: nextState,
-  //             nodes: treeConfig.nodes,
-  //             edges: treeConfig.edges,
-  //             timestamp: Date.now() + currentIndex,
-  //           })
-  //         );
+          if (!isStateAlreadyAdded) {
+            // Add new tree to history
+            dispatch(
+              addTree({
+                state: nextState,
+                nodes: treeConfig.nodes,
+                edges: treeConfig.edges,
+                timestamp: Date.now() + currentIndex,
+              })
+            );
 
-  //         // Update current state
-  //         dispatch(setTreeState(nextState));
-  //       }
-  //     }
+            // Update current state
+            dispatch(setTreeState(nextState));
+          }
+        }
 
-  //     currentIndex++;
-  //   }
-  // };
+        currentIndex++;
+      }
+    };
 
-  // Add first state immediately
-  // addNextState();
+    addNextState();
 
-  // Add subsequent states with interval
-  // const interval = setInterval(() => {
-  //   addNextState();
+    const interval = setInterval(() => {
+      addNextState();
 
-  // Clear interval when all states are added
-  //   if (currentIndex >= STATES_TO_ADD.length) {
-  //     clearInterval(interval);
-  //   }
-  // }, 5000);
+      if (currentIndex >= STATES_TO_ADD.length) {
+        clearInterval(interval);
+      }
+    }, 1000);
 
-  // return () => clearInterval(interval);
-  // }, [dispatch, treeHistory]);
+    return () => clearInterval(interval);
+  }, [dispatch, treeHistory]);
 
   const handleNavigation = useCallback(
     (direction: "up" | "down") => {
