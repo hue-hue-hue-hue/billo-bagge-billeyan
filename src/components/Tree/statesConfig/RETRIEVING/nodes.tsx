@@ -24,7 +24,7 @@ export const retrievingNodes = [
   {
     id: "14",
     type: "customNode",
-    data: { label: "Pathway", color: "#763DA9", hierarchy: "LASTCHILD" },
+    data: { label: "Vector Store", color: "#763DA9", hierarchy: "LASTCHILD" },
     position: { x: 360, y: 75 },
   },
 ];

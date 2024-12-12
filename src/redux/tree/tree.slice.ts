@@ -39,8 +39,14 @@ const treeSlice = createSlice({
     setActiveTreeIndex(state, action: PayloadAction<number>) {
       state.activeTreeIndex = action.payload;
     },
+    resetTree(state) {
+      state.currentState = initialState.currentState;
+      state.treeHistory = initialState.treeHistory;
+      state.activeTreeIndex = initialState.activeTreeIndex;
+    },
   },
 });
 
-export const { setTreeState, addTree, setActiveTreeIndex } = treeSlice.actions;
+export const { setTreeState, addTree, setActiveTreeIndex, resetTree } =
+  treeSlice.actions;
 export default treeSlice.reducer;

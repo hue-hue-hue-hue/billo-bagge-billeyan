@@ -8,6 +8,7 @@ import { qrecievingEdges } from "@/components/Tree/statesConfig/QRECEIVING/edges
 
 import { retrievedNodes } from "@/components/Tree/statesConfig/RETRIEVED/nodes";
 import { retrievedEdges } from "@/components/Tree/statesConfig/RETRIEVED/edges";
+import { formatString } from "@/utils/helpers";
 
 function removeNumbers(str: string): string {
   return str.replace(/\d+/g, "");
@@ -18,7 +19,7 @@ const giveSingleNode = (label: string, x?: number, y?: number) => {
     id: label,
     type: "customNode",
     data: {
-      label: removeNumbers(label),
+      label: formatString(removeNumbers(label)),
       rippleColor: getColorForTreeState(label),
       hierarchy: "CHILD",
     },

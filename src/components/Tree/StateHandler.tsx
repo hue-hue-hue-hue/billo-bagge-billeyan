@@ -89,7 +89,7 @@ const StateHandler = () => {
   }, [isConnected, toolCalls.length]);
 
   return (
-    <div className="w-fit text-sm">
+    <div className="w-fit text-sm hidden">
       <h1>State Handler</h1>
       <p>Tool Calls: {toolCalls[toolCalls.length - 1]} </p>
     </div>

@@ -117,7 +117,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                   value={key}
                   className="border px-2 rounded-lg border-[#484851] hover:bg-[#18181B] transition-all duration-150 prose text-white w-full h-full overflow-y-scroll"
                 >
-                  <MarkdownRenderer content={something(value)} />
+                  <MarkdownRenderer content={something(value as string)} />
                 </TabsContent>
               ))}
           </Tabs>

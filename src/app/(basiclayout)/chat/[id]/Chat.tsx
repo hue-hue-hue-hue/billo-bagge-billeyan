@@ -5,10 +5,13 @@ import UPARRSVG from "@/assets/icons/uparr.svg";
 import Image from "next/image";
 import { Message } from "@/utils/types";
 import { useQueryWebSocket } from "@/hooks/useQueryWebSocket";
+import { useAppDispatch } from "@/redux/store";
+import { resetTree } from "@/redux/tree/tree.slice";
 const ChatComponent = ({ chatId }: { chatId: string }) => {
   const { addMessageToActiveChat } = useChatStore();
   const { sendQuery } = useQueryWebSocket();
   const [prompt, setPrompt] = useState("");
+  const dispatch = useAppDispatch();
 
   const handleSend = async () => {
     if (!prompt.trim()) return;
@@ -16,6 +19,7 @@ const ChatComponent = ({ chatId }: { chatId: string }) => {
     const created_message = await createMessage(chatId, prompt);
     console.log("createdMessage >>>>>> ", created_message);
     addMessageToActiveChat(created_message.data as Message);
+    dispatch(resetTree());
     sendQuery(prompt, chatId);
     setPrompt("");
   };
