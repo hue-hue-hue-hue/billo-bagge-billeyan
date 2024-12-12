@@ -8,62 +8,32 @@ import {
 import { Tabs, TabsList } from "@/components/ui/tabs";
 import { TabsContent, TabsTrigger } from "@radix-ui/react-tabs";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { Documents } from "@/utils/types";
-import ReactMarkdown from "react-markdown";
+import { useEffect, useMemo, useState } from "react";
+import AnswerSVG from "@/assets/icons/chat.svg";
+import { MarkdownRenderer } from "@/components/MarkdownRenderer";
+import { formatString, something } from "@/utils/helpers";
+import { MergerAcquisition } from "@prisma/client";
+import InsightsRenderer from "@/components/mergers-acquistions/InsightsRenderer";
+import AnalyticsCard from "@/components/mergers-acquistions/Analytics";
+import Image from "next/image";
+import { useMA } from "@/hooks/useMA";
 
 const Page = ({ params }: { params: { id: string } }) => {
-  const [data, setData] = useState<Documents | null>(null);
-
+  const [data, setData] = useState<MergerAcquisition | null>(null);
+  const { isCompleted, isConnected } = useMA();
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3000/api/MA/documents/${params.id}`
-        );
-        if (response.status === 200) {
+    if ((isConnected && isCompleted) || !data) {
+      console.log(" me request maar raha hu");
+      axios
+        .get(`/api/MA/documents/${params.id}`)
+        .then((response) => {
           console.log(response.data.data);
-          console.log(response.data.data.insights);
-          setData(response.data.data);
-        } else {
-          console.error(
-            "Failed to fetch data, establishing WebSocket connection..."
-          );
-          establishWebSocketConnection();
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        establishWebSocketConnection();
-      }
-    };
-
-    const establishWebSocketConnection = () => {
-      const socket = new WebSocket("ws://localhost:8230/ws/check");
-
-      socket.onopen = () => {
-        console.log("WebSocket connection established");
-      };
-
-      socket.onmessage = async (event) => {
-        const message = JSON.parse(event.data);
-        if (message.result === "OK") {
-          console.log("Received OK from WebSocket, fetching data again...");
-          fetchData();
-        }
-      };
-
-      socket.onerror = (error) => {
-        console.error("WebSocket error:", error);
-      };
-
-      socket.onclose = () => {
-        console.log("WebSocket connection closed");
-      };
-    };
-
-    fetchData();
-  }, [params.id]);
-
+        })
+        .catch((error) => {
+          console.error("Error fetching flag data:", error);
+        });
+    }
+  }, [params.id, isCompleted, isConnected]);
   if (!data) return <div>Loading...</div>;
 
   return (
@@ -76,7 +46,35 @@ const Page = ({ params }: { params: { id: string } }) => {
         >
           <h1 className="border-b-2 pb-1 text-lg">Document Analysis</h1>
           <div className="h-full overflow-y-scroll">
-            {/* <InsightsRenderer insightData={data.insights || {}} /> */}
+            <h1 className="flex items-center gap-2">
+              <Image src={AnswerSVG} alt="answer" />
+              <p>Answer</p>
+            </h1>
+            {data && data.metrics && (
+              <div className="flex flex-wrap">
+                <AnalyticsCard
+                  color="#fbbf24"
+                  name="Overall Alignment"
+                  value={parseFloat(data.metrics.overall_alignment)}
+                />
+                <AnalyticsCard
+                  color="#34d399"
+                  name="Accountability & Oversight"
+                  value={parseFloat(data.metrics.accountability_oversight)}
+                />
+                <AnalyticsCard
+                  color="#3b82f6"
+                  name="Culture & Compatibility"
+                  value={parseFloat(data.metrics.cultural_compatibility)}
+                />
+                <AnalyticsCard
+                  color="#a855f7"
+                  name="Ethical Standards"
+                  value={parseFloat(data.metrics.ethical_standards)}
+                />
+              </div>
+            )}
+            <InsightsRenderer insightData={data.insights || {}} />
           </div>
           <ChatInput />
         </ResizablePanel>
@@ -92,7 +90,8 @@ const Page = ({ params }: { params: { id: string } }) => {
                   ([key]) =>
                     key !== "id" &&
                     key !== "conversation_id" &&
-                    key !== "insights"
+                    key !== "insights" &&
+                    key !== "metrics"
                 )
                 .map(([key, value]) => (
                   <TabsTrigger
@@ -100,7 +99,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                     value={key}
                     className="border px-2 rounded-lg border-[#484851] hover:bg-[#18181B] transition-all duration-150 w-40"
                   >
-                    {key}
+                    {formatString(key)}
                   </TabsTrigger>
                 ))}
             </TabsList>
@@ -109,7 +108,8 @@ const Page = ({ params }: { params: { id: string } }) => {
                 ([key]) =>
                   key !== "id" &&
                   key !== "conversation_id" &&
-                  key !== "insights"
+                  key !== "insights" &&
+                  key !== "metrics"
               )
               .map(([key, value]) => (
                 <TabsContent
@@ -117,14 +117,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                   value={key}
                   className="border px-2 rounded-lg border-[#484851] hover:bg-[#18181B] transition-all duration-150 prose text-white w-full h-full overflow-y-scroll"
                 >
-                  <ReactMarkdown
-                    className={`prose dark:prose-invert
-  prose-h1:font-bold prose-h1:text-xl
-  prose-a:text-blue-600 prose-p:text-justify prose-img:rounded-xl
-  prose-headings:underline`}
-                  >
-                    {value}
-                  </ReactMarkdown>
+                  <MarkdownRenderer content={something(value)} />
                 </TabsContent>
               ))}
           </Tabs>

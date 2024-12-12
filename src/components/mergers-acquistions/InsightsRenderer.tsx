@@ -1,20 +1,30 @@
-import { InsigtsAnalysis } from "@/utils/types";
-import AnswerSVG from "@/assets/icons/chat.svg";
-import Image from "next/image";
-import InsightsSections from "./InsightsSections";
+import { MergerAcquisitionInsights } from "@prisma/client";
+import { formatString } from "@/utils/helpers";
 const InsightsRenderer = ({
   insightData,
 }: {
-  insightData: InsigtsAnalysis;
+  insightData: MergerAcquisitionInsights;
 }) => {
   return (
     <div className="flex flex-col gap-2 h-full">
-      <h1 className="text-2xl font-semibold py-2">{insightData.title}</h1>
-      <h1 className="flex items-center gap-2">
-        <Image src={AnswerSVG} alt="answer" />
-        <p>Answer</p>
-      </h1>
-      <p className="text-lg text-[#E8E8E6] font-extralight">
+      {/* <h1 className="text-2xl font-semibold py-2">{insightData.title}</h1> */}
+
+      <div className="flex flex-wrap gap-8 justify-center">
+        {Object.entries(insightData).map(([key, value]) => {
+          return (
+            <div
+              key={key}
+              className="flex flex-col w-2/5 font-sans border p-2 border-gray-600 rounded-xl"
+            >
+              <h1 className="text-3xl mb-2 w-full text-center">
+                {formatString(key)}
+              </h1>
+              <p className="font-extralight">{value}</p>
+            </div>
+          );
+        })}
+      </div>
+      {/* <p className="text-lg text-[#E8E8E6] font-extralight">
         {insightData.summary}
       </p>
       <div>yaha analytics aayenge</div>
@@ -30,7 +40,7 @@ const InsightsRenderer = ({
             </li>
           ))}
         </ul>
-      </div>
+      </div> */}
     </div>
   );
 };

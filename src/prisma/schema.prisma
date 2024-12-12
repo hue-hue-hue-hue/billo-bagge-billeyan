@@ -8,6 +8,40 @@ datasource db {
   relationMode = "prisma"
 }
 
+type CaAgentApplicableSections {
+  section String
+  summary String
+}
+
+type CaAgentNonApplicableSections {
+  section String
+  summary String
+}
+
+type CaAgentSectionSummaries {
+  C   String @map("80C")
+  CC  String @map("80CC")
+  CCA String @map("80CCA")
+  CCB String @map("80CCB")
+  CCC String @map("80CCC")
+  CCD String @map("80CCD")
+  CCF String @map("80CCF")
+  CCG String @map("80CCG")
+  CCH String @map("80CCH")
+  D   String @map("80D")
+  DD  String @map("80DD")
+  DDB String @map("80DDB")
+  E   String @map("80E")
+  EE  String @map("80EE")
+  EEA String @map("80EEA")
+  EEB String @map("80EEB")
+  G   String @map("80G")
+  GG  String @map("80GG")
+  GGA String @map("80GGA")
+  GGB String @map("80GGB")
+  GGC String @map("80GGC")
+}
+
 type FlagAgentEvaluations {
   explanation String
   id          String
@@ -17,59 +51,66 @@ type FlagAgentEvaluations {
   resultId    String
 }
 
-
-
-model FlagAgent {
-  id                 String                 @id @default(auto()) @map("_id") @db.ObjectId
-  category           String
-  checklistRelevance Float
-  evaluations        FlagAgentEvaluations[]
-  file               String
-  flagID             String
-  group_id           String
-}
-model Chat {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  title         String    @default("New Chat")
-  messages      Message[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  isDeleted     Boolean   @default(false)
-}
-
-model Message {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  chatId        String    @db.ObjectId
-  chat          Chat      @relation(fields: [chatId], references: [id])
-  role          MessageRole
-  content       String
-  createdAt     DateTime  @default(now())
-  metadata      Json?
-}
-
-enum MessageRole {
-  USER
-  ASSISTANT
-}
-
-
-type DocumentsInsights {
+type MergerAcquisitionInsights {
   cultural_considerations   String
   financial_risk_assessment String
   operational_compatibility String
   regulatory_compliance     String
 }
 
-
-model MergerAcquisition {
-  id                   String            @id @default(auto()) @map("_id") @db.ObjectId
-  Definitive_Agreement String            @map("Definitive Agreement")
-  Due_Diligence        String            @map("Due Diligence")
-  Letter_of_Intent     String            @map("Letter of Intent")
-  NDA                  String
-  Term_Sheet           String            @map("Term Sheet")
-  conversation_id      String
-  insights             DocumentsInsights
+type MergerAcquisitionMetrics {
+  accountability_oversight String
+  cultural_compatibility   String
+  ethical_standards        String
+  overall_alignment        String
 }
 
+model CA_agent {
+  id                      String                   @id @default(auto()) @map("_id") @db.ObjectId
+  CAID                    String
+  /// Multiple data types found: Array(String): 50%, Array(CaAgentApplicableSections): 50% out of 2 sampled entries
+  applicable_sections     Json
+  /// Multiple data types found: Array(String): 50%, Array(CaAgentNonApplicableSections): 50% out of 2 sampled entries
+  non_applicable_sections Json
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  probable_sections       Json?
+  section_summaries       CaAgentSectionSummaries?
+}
 
+model Chat {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @db.Date
+  isDeleted Boolean
+  title     String
+  updatedAt DateTime @db.Date
+}
+
+model FlagAgent {
+  id                 String                 @id @default(auto()) @map("_id") @db.ObjectId
+  category           String?
+  checklistRelevance Float?
+  evaluations        FlagAgentEvaluations[]
+  file               String
+  flagID             String
+  group_id           String?
+}
+
+model MergerAcquisition {
+  id                   String                    @id @default(auto()) @map("_id") @db.ObjectId
+  Definitive_Agreement String                    @map("Definitive Agreement")
+  Due_Diligence        String                    @map("Due Diligence")
+  Letter_of_Intent     String                    @map("Letter of Intent")
+  NDA                  String
+  Term_Sheet           String                    @map("Term Sheet")
+  conversation_id      String
+  insights             MergerAcquisitionInsights
+  metrics              MergerAcquisitionMetrics
+}
+
+model Message {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  chatId    String   @db.ObjectId
+  content   String
+  createdAt DateTime @db.Date
+  role      String
+}

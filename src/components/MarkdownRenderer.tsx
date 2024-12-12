@@ -11,6 +11,7 @@ export function MarkdownRenderer({
   content,
   className = "",
 }: MarkdownRendererProps) {
+  // console.log(content);
   return (
     <ReactMarkdown
       className={`w-full prose max-w-none dark:prose-invert ${className}`}

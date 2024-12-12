@@ -2,7 +2,6 @@
 import ChatInput from "@/components/chat/chatInput";
 import FlagContainer from "@/components/flag/FlagsContainer";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
-import AnalyticsCard from "@/components/mergers-acquistions/Analytics";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -12,8 +11,6 @@ import { useFlags } from "@/hooks/useFlags";
 import { FlagAgent } from "@prisma/client";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import Markdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 const FlagAnalysis = ({ params }: { params: { id: string } }) => {
   const [data, setData] = useState<FlagAgent | null>(null);
   const { isConnected, isCompleted } = useFlags();
@@ -24,7 +21,10 @@ const FlagAnalysis = ({ params }: { params: { id: string } }) => {
       axios
         .get(`/api/flags/${params.id}`)
         .then((response) => {
-          setData(response.data);
+          console.log(!!response.data.evaluations);
+          console.log(response.data);
+          if (!!response.data.checklistRelevance) setData(response.data);
+          // setData(response.data);
         })
         .catch((error) => {
           console.error("Error fetching flag data:", error);
@@ -41,14 +41,6 @@ const FlagAnalysis = ({ params }: { params: { id: string } }) => {
         >
           <h1 className="text-xl border-b-2">Terms and Condition Analysis</h1>
           <div className="h-full my-2 py-3 overflow-y-scroll">
-            {/* {data && (
-              <div className="flex flex-col">
-                <p>Category: {data.category}</p>
-                <p>Checklist Relevance: {data.checklistRelevance}</p>
-                <p>FlagID: {data.flagID}</p>
-              </div>
-            )} */}
-
             {data && <MarkdownRenderer content={data.file} />}
           </div>
           <ChatInput />
