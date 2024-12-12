@@ -8,11 +8,9 @@ import { useEffect, useState } from "react";
 import { getChatMessages } from "@/utils/apiFunctions";
 import { useChatStore } from "@/zustand/chat";
 import ChatComponent from "./Chat";
-import { useQueryWebSocket } from "@/hooks/useQueryWebSocket";
-import ReactMarkdown from "react-markdown";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 
-const querytw = "text-4xl text-[#A2BCE4] font-semibold";
+const querytw = "text-3xl font-semibold";
 const responsetw = "text-lg font-light text-[#E8E8E6]";
 
 const Page = ({ params }: { params: { id: string } }) => {
@@ -70,7 +68,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                         </h1>
                         <MarkdownRenderer
                           content={message.content}
-                          className=" text-white" // Optional additional classes
+                          className="" // Optional additional classes
                         />
                       </>
                     )}

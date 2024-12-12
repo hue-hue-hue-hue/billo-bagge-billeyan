@@ -8,16 +8,16 @@ interface TreeSliceState {
   activeTreeIndex: number;
 }
 
-const initialTreeConfig = getTreeConfig(TreeState.QRECEIVING);
+const initialTreeConfig = getTreeConfig(TreeState.IDEAL);
 
 const initialState: TreeSliceState = {
-  currentState: TreeState.QRECEIVING,
+  currentState: TreeState.IDEAL,
   treeHistory: initialTreeConfig
     ? [
         {
           nodes: initialTreeConfig.nodes,
           edges: initialTreeConfig.edges,
-          state: TreeState.QRECEIVING,
+          state: TreeState.IDEAL,
           timestamp: Date.now(),
         },
       ]

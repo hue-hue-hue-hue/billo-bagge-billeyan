@@ -54,7 +54,7 @@ export const useWebSocketLogs = ({
       newSocket.onmessage = (event) => {
         const res = event.data;
         const info = JSON.parse(res) as WebSocketMessage;
-        if (info.type === "function") {
+        if (info.type === "tree") {
           const toolName = info.name;
           setToolCalls((prev) => [...prev, toolName]);
 

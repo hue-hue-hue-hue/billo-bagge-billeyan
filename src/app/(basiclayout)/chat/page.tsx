@@ -6,17 +6,19 @@ import { useState } from "react";
 import { createChat } from "@/utils/apiFunctions";
 import { useRouter } from "next/navigation";
 import { useChatStore } from "@/zustand/chat";
+import { useQueryWebSocket } from "@/hooks/useQueryWebSocket";
 
 const ChatPage: React.FC = () => {
   const router = useRouter();
   const { addSidebarChat } = useChatStore();
   const [prompt, setPrompt] = useState("");
-
+  const { sendQuery } = useQueryWebSocket();
   const handleSend = async () => {
     if (!prompt.trim()) return;
     console.log("Sending prompt: ", prompt);
     const response = await createChat(prompt);
     console.log("Response: ", response.data);
+    sendQuery(prompt, response.data.id);
     addSidebarChat(response.data);
     router.push(`/chat/${response.data.id}`);
   };
@@ -29,8 +31,8 @@ const ChatPage: React.FC = () => {
   };
   return (
     <div className="flex flex-col justify-center items-center w-full gap-5">
-      <h1 className="text-4xl text-[#ABC3FF]"> What can I dig up?</h1>
-      <div className="w-[32rem]">
+      <h1 className="text-6xl"> What can I dig up?</h1>
+      <div className="w-[54rem]">
         <div className="flex flex-col bg-[#141415] border border-[#313131] p-4 rounded-lg shadow-lg w-full mx-auto">
           <textarea
             value={prompt}

@@ -19,10 +19,10 @@ export const FlagCard: React.FC<FlagCardProps> = ({
           </span>
           <h1>{title}</h1>
         </div>
-        <Flag color={type == "caution" ? "#F2A20D" : "#FF6166"} />
+        <Flag color={type == "safe" ? "#F2A20D" : "#FF6166"} />
       </div>
       <div className="font-extralight">
-        <p className={`text-[${type == "caution" ? "#F2A20D" : "#FF6166"}]`}>
+        <p className={`text-[${type == "safe" ? "#F2A20D" : "#FF6166"}]`}>
           {fault}
         </p>
         <p className="text-sm text-[#A1A1AA]">{description}</p>

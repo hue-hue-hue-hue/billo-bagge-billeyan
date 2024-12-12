@@ -71,21 +71,21 @@ export type PromptState = {
 export enum TreeState {
   // Base States
   IDEAL = "IDEAL",
-  QRECEIVING = "QRECEIVING",
-  QRECEIVED = "QRECEIVED",
-  QCLASSIFYING = "QCLASSIFYING",
-  QANALYSING = "QANALYSING",
-  QANALYSED = "QANALYSED",
+  GUARDRAIL = "GUARDRAIL",
+  ADARAG = "AdaRAG",
+  SINGLE_RETRIEVAL = "SINGLE_RETRIEVAL",
+  MULTI_RETRIEVAL = "MULTI_RETRIEVAL",
+  FINANCE_QUERY = "FINANCE_QUERY",
+  LEGAL_QUERY = "LEGAL_QUERY",
+  GENERAL_QUERY = "GENERAL_QUERY",
+  PLAN_RAG = "PLAN_RAG",
   RETRIEVING = "RETRIEVING",
-  SRETRIVAL = "Single Retrieval Call",
-  EXPANDED_QUERY = "Expanded Query",
-  RETRIVAL_CALL = "Retrieval Call",
-  RETRIEVED = "Retrieved",
+  // RETRIEVED = "RETRIEVED",
   RRF_CALL = "RRF (K docs)",
   METRAG_CALL = "MetRAG",
   CRAG_CALL = "CRAG",
-  COHERE_CALL = "Cohere Rerank",
-  FINAL_CONTEXT = "Final Retrieved Context",
+  COHERE_RERANK = "Cohere Rerank",
+  FINAL_RAG_RESPONSE = "Final RAG Response",
 }
 
 export interface TreeData {
@@ -96,7 +96,7 @@ export interface TreeData {
 }
 
 export interface FlagCardProps {
-  type: "caution" | "risk";
+  type: "safe" | "risk";
   title: string;
   fault: string;
   description: string;

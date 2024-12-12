@@ -8,18 +8,26 @@ datasource db {
   relationMode = "prisma"
 }
 
-// type ConversationsChats {
-//   message String
-//   order   Int
-//   role    String
-// }
+type FlagAgentEvaluations {
+  explanation String
+  id          String
+  isMet       Int
+  item        String
+  reference   String?
+  resultId    String
+}
 
-// model conversations {
-//   id    String               @id @map("_id")
-//   chats ConversationsChats[]
-//   title String
-// }
 
+
+model FlagAgent {
+  id                 String                 @id @default(auto()) @map("_id") @db.ObjectId
+  category           String
+  checklistRelevance Float
+  evaluations        FlagAgentEvaluations[]
+  file               String
+  flagID             String
+  group_id           String
+}
 model Chat {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
   title         String    @default("New Chat")
@@ -52,14 +60,6 @@ type DocumentsInsights {
   regulatory_compliance     String
 }
 
-// model Evaluation {
-//   id String @id @default(auto()) @map("_id") @db.ObjectId
-// }
-
-// model Result {
-//   id String @id @default(auto()) @map("_id") @db.ObjectId
-// }
-
 
 model MergerAcquisition {
   id                   String            @id @default(auto()) @map("_id") @db.ObjectId
@@ -71,3 +71,5 @@ model MergerAcquisition {
   conversation_id      String
   insights             DocumentsInsights
 }
+
+
