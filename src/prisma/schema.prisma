@@ -8,16 +8,85 @@ datasource db {
   relationMode = "prisma"
 }
 
-type ConversationsChats {
-  message String
-  order   Int
-  role    String
+type FlagAgentEvaluations {
+  explanation String
+  id          String
+  isMet       Int
+  item        String
+  reference   String?
+  resultId    String
 }
 
-model conversations {
-  id    String               @id @map("_id")
-  chats ConversationsChats[]
-  title String
+type MergerAcquisitionInsights {
+  cultural_considerations   String
+  financial_risk_assessment String
+  operational_compatibility String
+  regulatory_compliance     String
+}
+
+type MergerAcquisitionMetrics {
+  accountability_oversight String
+  cultural_compatibility   String
+  ethical_standards        String
+  overall_alignment        String
+}
+
+model CA_agent {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+}
+
+
+
+model FlagAgent {
+  id                 String                 @id @default(auto()) @map("_id") @db.ObjectId
+  category           String
+  checklistRelevance Float
+  evaluations        FlagAgentEvaluations[]
+  file               String
+  flagID             String
+  group_id           String
+}
+
+model MacroAgent {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  MacroID  String
+  response String
+}
+
+model MergerAcquisition {
+  id                   String                    @id @default(auto()) @map("_id") @db.ObjectId
+  Definitive_Agreement String                    @map("Definitive Agreement")
+  Due_Diligence        String                    @map("Due Diligence")
+  Letter_of_Intent     String                    @map("Letter of Intent")
+  NDA                  String
+  Term_Sheet           String                    @map("Term Sheet")
+  conversation_id      String
+  insights             MergerAcquisitionInsights
+  metrics              MergerAcquisitionMetrics
+}
+
+model Chat {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  title         String    @default("New Chat")
+  messages      Message[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  isDeleted     Boolean   @default(false)
+}
+
+model Message {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  chatId        String    @db.ObjectId
+  chat          Chat      @relation(fields: [chatId], references: [id])
+  role          MessageRole
+  content       String
+  createdAt     DateTime  @default(now())
+  metadata      Json?
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
 }
 
 
@@ -28,22 +97,7 @@ type DocumentsInsights {
   regulatory_compliance     String
 }
 
-model Evaluation {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-}
-
-model Result {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-}
 
 
-model documents {
-  id                   String            @id @default(auto()) @map("_id") @db.ObjectId
-  Definitive_Agreement String            @map("Definitive Agreement")
-  Due_Diligence        String            @map("Due Diligence")
-  Letter_of_Intent     String            @map("Letter of Intent")
-  NDA                  String
-  Term_Sheet           String            @map("Term Sheet")
-  conversation_id      String
-  insights             DocumentsInsights
-}
+
+

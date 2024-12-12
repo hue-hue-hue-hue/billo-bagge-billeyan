@@ -8,9 +8,9 @@ export async function GET(
 ) {
   console.log(params.id);
   try {
-    const result = await prisma.cA_agent.findFirst({
+    const result = await prisma.macroAgent.findFirst({
       where: {
-        CAID: params.id,
+        MacroID: params.id,
       },
     });
 

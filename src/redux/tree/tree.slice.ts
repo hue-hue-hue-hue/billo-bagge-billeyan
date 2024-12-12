@@ -8,16 +8,16 @@ interface TreeSliceState {
   activeTreeIndex: number;
 }
 
-const initialTreeConfig = getTreeConfig(TreeState.QRECEIVING);
+const initialTreeConfig = getTreeConfig(TreeState.IDEAL);
 
 const initialState: TreeSliceState = {
-  currentState: TreeState.QRECEIVING,
+  currentState: TreeState.IDEAL,
   treeHistory: initialTreeConfig
     ? [
         {
           nodes: initialTreeConfig.nodes,
           edges: initialTreeConfig.edges,
-          state: TreeState.QRECEIVING,
+          state: TreeState.IDEAL,
           timestamp: Date.now(),
         },
       ]
@@ -39,8 +39,14 @@ const treeSlice = createSlice({
     setActiveTreeIndex(state, action: PayloadAction<number>) {
       state.activeTreeIndex = action.payload;
     },
+    resetTree(state) {
+      state.currentState = initialState.currentState;
+      state.treeHistory = initialState.treeHistory;
+      state.activeTreeIndex = initialState.activeTreeIndex;
+    },
   },
 });
 
-export const { setTreeState, addTree, setActiveTreeIndex } = treeSlice.actions;
+export const { setTreeState, addTree, setActiveTreeIndex, resetTree } =
+  treeSlice.actions;
 export default treeSlice.reducer;

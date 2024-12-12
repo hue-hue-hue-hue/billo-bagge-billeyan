@@ -6,9 +6,10 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const samosa = await prisma.documents.findMany();
-    const document = await prisma.documents.findUnique({
-      where: { id: params.id },
+    // const samosa = await prisma.mergerAcquisition.findMany();
+    // console.log(samosa);
+    const document = await prisma.mergerAcquisition.findFirst({
+      where: { conversation_id: params.id },
     });
 
     if (!document) {

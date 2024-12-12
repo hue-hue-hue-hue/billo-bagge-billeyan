@@ -18,9 +18,6 @@ const MergerForm: React.FC = () => {
   const [objectId, setObjectId] = useState<string | null>(null);
   const [documentData, setDocumentData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
-  const [pollingStatus, setPollingStatus] = useState<
-    "idle" | "polling" | "completed"
-  >("idle");
 
   const handleFileChange = (
     field: keyof typeof formData,
@@ -57,6 +54,7 @@ const MergerForm: React.FC = () => {
       formData.companyBFinancialStatements.forEach((file) => {
         formDataObj.append("files", file);
       });
+      formDataObj.append("instructions", formData.specificRequirements);
 
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_MA_AGENT_URL}/submit`,
@@ -142,7 +140,7 @@ const MergerForm: React.FC = () => {
                     e.target.files
                   )
                 }
-                className="block w-full text-sm file:bg-purple-600 file:text-white file:py-2 file:px-4 file:border-none rounded"
+                className="block w-full text-sm file:bg-[#141415] file:text-white file:py-2 file:px-4 file:border-none rounded"
               />
               {formData[field as keyof typeof formData].length > 0 && (
                 <div className="mt-2 text-sm text-gray-400">
@@ -170,21 +168,14 @@ const MergerForm: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded text-white font-semibold"
+            className="bg-[#141415] hover:bg-[#141415] px-4 py-2 rounded text-white font-semibold"
           >
             {loading ? "Submitting..." : "Submit"}
           </button>
         </form>
       ) : (
         <div>
-          {pollingStatus === "polling" && (
-            <div className="text-center">
-              <p>Processing documents...</p>
-              <div className="animate-spin">🔄</div>
-            </div>
-          )}
-
-          {pollingStatus === "completed" && documentData && (
+          {documentData && (
             <div>
               <h2 className="text-xl font-bold mb-4">Generated Documents</h2>
 

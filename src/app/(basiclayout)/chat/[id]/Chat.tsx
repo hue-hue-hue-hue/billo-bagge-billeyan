@@ -1,14 +1,26 @@
-import { useState } from "react";
-
+import { createMessage } from "@/utils/apiFunctions";
+import { useChatStore } from "@/zustand/chat";
+import React, { useState } from "react";
 import UPARRSVG from "@/assets/icons/uparr.svg";
 import Image from "next/image";
-
-const ChatInput: React.FC = () => {
+import { Message } from "@/utils/types";
+import { useQueryWebSocket } from "@/hooks/useQueryWebSocket";
+import { useAppDispatch } from "@/redux/store";
+import { resetTree } from "@/redux/tree/tree.slice";
+const ChatComponent = ({ chatId }: { chatId: string }) => {
+  const { addMessageToActiveChat } = useChatStore();
+  const { sendQuery } = useQueryWebSocket();
   const [prompt, setPrompt] = useState("");
+  const dispatch = useAppDispatch();
 
   const handleSend = async () => {
     if (!prompt.trim()) return;
-
+    console.log("Sending prompt: ", prompt);
+    const created_message = await createMessage(chatId, prompt);
+    console.log("createdMessage >>>>>> ", created_message);
+    addMessageToActiveChat(created_message.data as Message);
+    dispatch(resetTree());
+    sendQuery(prompt, chatId);
     setPrompt("");
   };
 
@@ -18,7 +30,6 @@ const ChatInput: React.FC = () => {
       handleSend();
     }
   };
-
   return (
     <div className="flex flex-col bg-[#141415] border border-[#313131] p-4 rounded-lg shadow-lg w-full mx-auto">
       <textarea
@@ -42,4 +53,4 @@ const ChatInput: React.FC = () => {
   );
 };
 
-export default ChatInput;
+export default ChatComponent;

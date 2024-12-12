@@ -13,67 +13,26 @@ import { getTreeConfig } from "@/config/treeConfigs";
 import { TreeState } from "@/utils/types";
 import RenderTree from "./Tree";
 import { ChevronUp, ChevronDown } from "lucide-react";
+import { useWebSocketLogs } from "@/hooks/useSocketState";
+import StateHandler from "./StateHandler";
 
-// const STATES_TO_ADD = [
-//   TreeState.QRECEIVED,
-//   TreeState.RETRIEVING,
-//   TreeState.QANALYSING,
-// ];
+const STATES_TO_ADD = [
+  TreeState.SINGLE_RETRIEVAL,
+  // TreeState.EXPANDED_QUERY,
+  TreeState.RETRIEVING,
+  // TreeState.RETRIEVED,
+  TreeState.RRF_CALL,
+  TreeState.METRAG_CALL,
+  TreeState.CRAG_CALL,
+  TreeState.COHERE_RERANK,
+];
 
 const TreeContainer = () => {
   const dispatch = useAppDispatch();
   const { treeHistory, activeTreeIndex } = useTreeTransition();
 
   // Simulate state additions
-  // useEffect(() => {
-  //   let currentIndex = -1;
-
-  // const addNextState = () => {
-  //   if (currentIndex < STATES_TO_ADD.length) {
-  //     const nextState = STATES_TO_ADD[currentIndex];
-  //     const treeConfig = getTreeConfig(nextState);
-
-  //     if (treeConfig) {
-  //       // Check if the state is already in the history
-  //       const isStateAlreadyAdded = treeHistory.some(
-  //         (tree) => tree.state === nextState
-  //       );
-
-  //       if (!isStateAlreadyAdded) {
-  //         // Add new tree to history
-  //         dispatch(
-  //           addTree({
-  //             state: nextState,
-  //             nodes: treeConfig.nodes,
-  //             edges: treeConfig.edges,
-  //             timestamp: Date.now() + currentIndex,
-  //           })
-  //         );
-
-  //         // Update current state
-  //         dispatch(setTreeState(nextState));
-  //       }
-  //     }
-
-  //     currentIndex++;
-  //   }
-  // };
-
-  // Add first state immediately
-  // addNextState();
-
-  // Add subsequent states with interval
-  // const interval = setInterval(() => {
-  //   addNextState();
-
-  // Clear interval when all states are added
-  //   if (currentIndex >= STATES_TO_ADD.length) {
-  //     clearInterval(interval);
-  //   }
-  // }, 5000);
-
-  // return () => clearInterval(interval);
-  // }, [dispatch, treeHistory]);
+  useEffect(() => {}, [treeHistory]);
 
   const handleNavigation = useCallback(
     (direction: "up" | "down") => {
@@ -109,6 +68,7 @@ const TreeContainer = () => {
     <div className="relative h-64 flex items-center border px-2 rounded-sm w-full">
       <div className="h-full w-full rounded-lg overflow-hidden relative">
         <AnimatePresence initial={false} custom={activeTreeIndex}>
+          <StateHandler />
           <motion.div
             key={treeHistory[activeTreeIndex]?.state}
             custom={activeTreeIndex}
@@ -130,6 +90,7 @@ const TreeContainer = () => {
           </motion.div>
         </AnimatePresence>
       </div>
+
       <div className=" right-4 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-10">
         <button
           onClick={() => handleNavigation("up")}

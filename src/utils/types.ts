@@ -1,10 +1,36 @@
 import { Edge, Node } from "@xyflow/react";
 
+export enum MessageRole {
+  USER = "USER",
+  ASSISTANT = "ASSISTANT",
+}
+
+// Type for Chat
 export type Chat = {
-  message: string;
-  role: "USER" | "RAG";
-  order: number;
+  id: string; // Corresponds to @db.ObjectId
+  title: string;
+  messages: Message[];
+  createdAt: Date;
+  updatedAt: Date;
+  isDeleted: boolean;
 };
+
+// Type for Message
+export type Message = {
+  id: string; // Corresponds to @db.ObjectId
+  chatId: string; // Corresponds to @db.ObjectId
+  chat: Chat; // Relation to Chat
+  role: MessageRole; // Enum
+  content: string;
+  createdAt: Date;
+  metadata?: Record<string, any>; // Corresponds to Json? in Prisma
+};
+
+// export type Chat = {
+//   message: string;
+//   role: "USER" | "RAG";
+//   order: number;
+// };
 
 export type Conversation = {
   id: string;
@@ -45,50 +71,21 @@ export type PromptState = {
 export enum TreeState {
   // Base States
   IDEAL = "IDEAL",
-  QRECEIVING = "QRECEIVING",
-  QRECEIVED = "QRECEIVED",
-  QCLASSIFYING = "QCLASSIFYING",
-  QANALYSING = "QANALYSING",
-  QANALYSED = "QANALYSED",
-  RETRIEVING = "RETRIEVING",
-
-  // Common States
-  ADARAG_AGENT = "ADARAG_AGENT",
-  CORRECTIVE_RAG = "CORRECTIVE_RAG",
-  SCORE_DOCUMENT_RELEVANCE = "SCORE_DOCUMENT_RELEVANCE",
-  TRANSFER_TO_GENERAL_AGENT = "TRANSFER_TO_GENERAL_AGENT",
-  HYDE_QUERY = "HYDE_QUERY",
-  METRAG_SCORE = "METRAG_SCORE",
-  METRAG_FILTER = "METRAG_FILTER",
-  PLAN_RAG_QUERY = "PLAN_RAG_QUERY",
-  SINGLE_PLAN_RAG_STEP_QUERY = "SINGLE_PLAN_RAG_STEP_QUERY",
-  RERANK_DOCS = "RERANK_DOCS",
-  TAVILY_SEARCH = "TAVILY_SEARCH",
-  BRAVE_SEARCH = "BRAVE_SEARCH",
-  LINKUP_SEARCH = "LINKUP_SEARCH",
-
-  // Finance Agent States
-  TRANSFER_TO_FINANCE_AGENT = "TRANSFER_TO_FINANCE_AGENT",
-  SINGLE_RETRIEVER_FINANCE_AGENT = "SINGLE_RETRIEVER_FINANCE_AGENT",
-  STEP_EXECUTOR = "STEP_EXECUTOR",
-  MULTI_RETRIEVAL_FINANCE_AGENT = "MULTI_RETRIEVAL_FINANCE_AGENT",
-  SINGLE_RETRIEVAL_FINANCE_AGENT = "SINGLE_RETRIEVAL_FINANCE_AGENT",
-
-  // Guardrail States
   GUARDRAIL = "GUARDRAIL",
-
-  // Legal Agent States
-  TRANSFER_TO_LEGAL_AGENT = "TRANSFER_TO_LEGAL_AGENT",
-  SINGLE_RETRIEVER_LEGAL_AGENT = "SINGLE_RETRIEVER_LEGAL_AGENT",
-  MULTI_RETRIEVAL_LEGAL_AGENT = "MULTI_RETRIEVAL_LEGAL_AGENT",
-  SINGLE_RETRIEVAL_LEGAL_AGENT = "SINGLE_RETRIEVAL_LEGAL_AGENT",
-
-  // MA Agent States
-  PLAN_TO_QUERIES = "PLAN_TO_QUERIES",
-  GENERATE_AGREEMENT = "GENERATE_AGREEMENT",
-  INGEST = "INGEST",
-  GENERATE_DOCUMENT = "GENERATE_DOCUMENT",
-  SEND_DOCUMENTS = "SEND_DOCUMENTS",
+  ADARAG = "AdaRAG",
+  SINGLE_RETRIEVAL = "SINGLE_RETRIEVAL",
+  MULTI_RETRIEVAL = "MULTI_RETRIEVAL",
+  FINANCE_QUERY = "FINANCE_QUERY",
+  LEGAL_QUERY = "LEGAL_QUERY",
+  GENERAL_QUERY = "GENERAL_QUERY",
+  PLAN_RAG = "PLAN_RAG",
+  RETRIEVING = "RETRIEVING",
+  // RETRIEVED = "RETRIEVED",
+  RRF_CALL = "RRF (K docs)",
+  METRAG_CALL = "MetRAG",
+  CRAG_CALL = "CRAG",
+  COHERE_RERANK = "Cohere Rerank",
+  FINAL_RAG_RESPONSE = "Final RAG Response",
 }
 
 export interface TreeData {
@@ -99,7 +96,7 @@ export interface TreeData {
 }
 
 export interface FlagCardProps {
-  type: "caution" | "risk";
+  type: "safe" | "risk";
   title: string;
   fault: string;
   description: string;

@@ -44,7 +44,7 @@ const TermsAndConditions = () => {
   return (
     <div className="flex items-center justify-center w-full h-screen">
       <div className="p-4 flex flex-col gap-8">
-        <h1 className="text-4xl">Analyse TnC</h1>
+        <h1 className="text-4xl text-center">Analyse T&C</h1>
         <div className="border rounded-lg flex flex-col p-8 gap-5">
           <h1>Upload Document</h1>
           <input
@@ -54,7 +54,7 @@ const TermsAndConditions = () => {
           />
           <button
             onClick={handleFileUpload}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+            className="px-4 py-2 bg-[#141415] border border-white text-white rounded-lg"
             disabled={loading}
           >
             {loading ? "Uploading..." : "Upload"}
